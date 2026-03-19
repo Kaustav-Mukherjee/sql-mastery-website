@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign in to SQL Mastery</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--bg);
+            height: 100vh;
+            margin: 0;
+            padding: var(--spacing-4);
+        }
+        .login-container {
+            width: 308px;
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-4);
+            animation: fadeIn var(--transition);
+        }
+        .login-header {
+            text-align: center;
+            margin-bottom: var(--spacing-2);
+        }
+        .login-header svg {
+            color: var(--text);
+            margin-bottom: var(--spacing-5);
+        }
+        .login-header h1 {
+            font-size: 1.5rem;
+            font-weight: 300;
+            letter-spacing: -0.5px;
+        }
+        .login-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: var(--spacing-5);
+        }
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-2);
+            margin-bottom: var(--spacing-4);
+        }
+        .form-group label {
+            font-size: 0.9rem;
+            font-weight: 400;
+        }
+        .form-group input {
+            background-color: var(--bg-input);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            color: var(--text);
+            padding: 5px 12px;
+            font-size: 0.9rem;
+            line-height: 20px;
+            transition: border-color var(--transition);
+        }
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px var(--accent-glow);
+        }
+        .btn-signin {
+            width: 100%;
+            background-color: var(--green);
+            color: #fff;
+            border: 1px solid rgba(27, 31, 36, 0.15);
+            border-radius: var(--radius-sm);
+            padding: 5px 16px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color var(--transition);
+        }
+        .btn-signin:hover {
+            background-color: var(--green-hover);
+        }
+        .login-footer {
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: var(--spacing-4);
+            text-align: center;
+            font-size: 0.9rem;
+        }
+        .login-footer a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+        .login-footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-header">
+            <i data-lucide="database" style="width: 48px; height: 48px;"></i>
+            <h1>Sign in to SQL Mastery</h1>
+        </div>
+
+        <div class="login-card">
+            <form id="login-form">
+                <div class="form-group">
+                    <label for="login_field">Username or email address</label>
+                    <input type="text" id="login_field" name="login" required autofocus>
+                </div>
+                <div class="form-group" style="position: relative;">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <label for="password">Password</label>
+                        <a href="#" style="font-size: 0.8rem; color: var(--accent); text-decoration: none;">Forgot password?</a>
+                    </div>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <button type="submit" class="btn-signin">Sign in</button>
+            </form>
+        </div>
+
+        <div class="login-footer">
+            New to SQL Mastery? <a href="#">Create an account</a>.
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        document.getElementById('login-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const username = document.getElementById('login_field').value;
+            
+            // Simulated login: Save username and connection status
+            localStorage.setItem('sql_mastery_user', JSON.stringify({
+                username: username,
+                connected: true,
+                bio: 'SQL enthusiast and full-stack developer.',
+                links: {
+                    website: 'https://' + username + '.dev',
+                    twitter: '@' + username
+                }
+            }));
+
+            // Redirect to home
+            window.location.href = 'index.html';
+        });
+    </script>
+</body>
+</html>

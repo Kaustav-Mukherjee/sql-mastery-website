@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SQL Mastery — Learn & Practice SQL Interactively</title>
+    <meta name="description" content="Master SQL with interactive diagrams, plain-English explanations, and a live SQL playground. Practice at beginner, intermediate, and advanced levels.">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <a href="#" class="nav-logo" id="nav-logo-link">
+            <i data-lucide="database" class="logo-icon"></i>
+            <span class="logo-text">SQL<span class="logo-accent">Mastery</span></span>
+        </a>
+        <div class="nav-links">
+            <a href="#" class="nav-link active" data-section="home" id="nav-home">Home</a>
+            <a href="#" class="nav-link" data-section="intro" id="nav-intro">Intro</a>
+            <a href="#" class="nav-link" data-section="learn" id="nav-learn">Learn</a>
+            <a href="#" class="nav-link" data-section="practice" id="nav-practice">Practice</a>
+            <a href="#" class="nav-link" data-section="databases" id="nav-databases">Databases</a>
+            <a href="#" class="nav-link" data-section="profile" id="nav-profile">Profile</a>
+        </div>
+        <div class="nav-right" id="nav-auth-container">
+            <a href="login.html" class="btn btn--outline btn--sm" id="btn-signin-nav">
+                <i data-lucide="log-in"></i> Sign in
+            </a>
+        </div>
+        <div class="nav-indicator" id="nav-indicator"></div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content" id="main-content">
+
+        <!-- HOME SECTION -->
+        <section class="section section--active" id="section-home">
+            <div class="hero">
+                <div class="hero-glow"></div>
+                <div class="hero-badge">✦ Interactive SQL Learning Platform</div>
+                <h1 class="hero-title">
+                    Master <span class="gradient-text">SQL</span> by Doing
+                </h1>
+                <p class="hero-subtitle">
+                    Learn every SQL command with plain-English explanations, interactive diagrams, 
+                    and a live playground that runs real queries in your browser.
+                </p>
+                <div class="hero-actions">
+                    <button class="btn btn--primary btn--lg" id="hero-learn-btn">
+                        <i data-lucide="book-open"></i> Start Learning
+                    </button>
+                    <button class="btn btn--outline btn--lg" id="hero-practice-btn">
+                        <i data-lucide="zap"></i> Practice Now
+                    </button>
+                </div>
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <span class="stat-number">20+</span>
+                        <span class="stat-label">SQL Commands</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">30+</span>
+                        <span class="stat-label">Challenges</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">3</span>
+                        <span class="stat-label">Difficulty Levels</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Feature Cards -->
+            <div class="features-grid">
+                <div class="feature-card" id="feature-intro">
+                    <div class="feature-icon"><i data-lucide="book"></i></div>
+                    <h3>Beginner-Friendly Intro</h3>
+                    <p>Start with the basics — what databases, SQL, queries, and servers actually are. Zero prior knowledge needed.</p>
+                </div>
+                <div class="feature-card" id="feature-diagrams">
+                    <div class="feature-icon"><i data-lucide="layout"></i></div>
+                    <h3>Interactive Diagrams</h3>
+                    <p>See exactly how each command transforms your data with animated before-and-after tables.</p>
+                </div>
+                <div class="feature-card" id="feature-practice">
+                    <div class="feature-icon"><i data-lucide="code"></i></div>
+                    <h3>Live SQL Playground</h3>
+                    <p>Write real SQL queries and see results instantly. A full SQLite database runs right in your browser.</p>
+                </div>
+                <div class="feature-card" id="feature-modes">
+                    <div class="feature-icon"><i data-lucide="award"></i></div>
+                    <h3>3 Difficulty Modes</h3>
+                    <p>Progress from Beginner to Intermediate to Advanced with curated challenges at every level.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- INTRO SECTION -->
+        <section class="section" id="section-intro">
+            <div class="section-header">
+                <h2 class="section-title">Introduction to SQL</h2>
+                <p class="section-desc">Before diving into SQL commands, let's understand the fundamentals — what databases are, how SQL works, and why it matters.</p>
+            </div>
+            <div class="intro-grid" id="intro-cards">
+                <!-- Populated by intro.js -->
+            </div>
+            <div id="intro-videos">
+                <!-- Populated by intro.js -->
+            </div>
+        </section>
+
+        <!-- LEARN SECTION -->
+        <section class="section" id="section-learn">
+            <div class="section-header">
+                <h2 class="section-title">Learn SQL Commands</h2>
+                <p class="section-desc">Click any command below to see its explanation, visual diagram, and a live example you can edit and run.</p>
+            </div>
+            <div class="learn-categories" id="learn-categories">
+                <!-- Populated by learn.js -->
+            </div>
+            <div class="learn-cards" id="learn-cards">
+                <!-- Populated by learn.js -->
+            </div>
+        </section>
+
+        <!-- PRACTICE SECTION -->
+        <section class="section" id="section-practice">
+            <div class="section-header">
+                <h2 class="section-title">Practice SQL Queries</h2>
+                <p class="section-desc">Solve real-world SQL challenges. Run your queries, see live results, and check answers only when you're ready.</p>
+            </div>
+            <div class="practice-tabs" id="practice-tabs">
+                <button class="practice-tab active" data-mode="beginner" id="tab-beginner">
+                    <i data-lucide="sprout"></i> Beginner
+                </button>
+                <button class="practice-tab" data-mode="intermediate" id="tab-intermediate">
+                    <i data-lucide="zap"></i> Intermediate
+                </button>
+                <button class="practice-tab" data-mode="advanced" id="tab-advanced">
+                    <i data-lucide="flame"></i> Advanced
+                </button>
+            </div>
+            <div class="practice-challenges" id="practice-challenges">
+                <!-- Populated by practice.js -->
+            </div>
+        </section>
+
+        <!-- DATABASES SECTION -->
+        <section class="section" id="section-databases">
+            <div class="section-header">
+                <i data-lucide="database" class="section-icon"></i>
+                <h2 class="section-title">Database Explorer</h2>
+                <p class="section-desc">Select a dataset to practice with. Switch between different real-world scenarios instantly.</p>
+            </div>
+            <div class="db-grid" id="db-list">
+                <!-- Populated by databases.js -->
+            </div>
+        </section>
+
+        <!-- PROFILE SECTION -->
+        <section class="section" id="section-profile">
+            <div class="profile-container" id="profile-content">
+                <!-- Populated by profile.js -->
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast"></div>
+
+    <!-- Scripts -->
+    <script src="https://sql.js.org/dist/sql-wasm.js"></script>
+    <script src="js/intro.js"></script>
+    <script src="js/databases.js"></script>
+    <script src="js/profile.js"></script>
+    <script src="js/learn.js"></script>
+    <script src="js/practice.js"></script>
+    <script src="js/app.js"></script>
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+    </script>
+</body>
+</html>
