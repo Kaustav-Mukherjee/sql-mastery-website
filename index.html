@@ -6,7 +6,6 @@
     <title>SQL Mastery — Learn & Practice SQL Interactively</title>
     <meta name="description" content="Master SQL with interactive diagrams, plain-English explanations, and a live SQL playground. Practice at beginner, intermediate, and advanced levels.">
     <link rel="stylesheet" href="css/style.css">
-    <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
     <!-- Navigation -->
@@ -255,24 +254,31 @@
     <div class="toast" id="toast"></div>
 
     <!-- Scripts -->
-    <script src="https://sql.js.org/dist/sql-wasm.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://sql.js.org/dist/sql-wasm.js" defer></script>
     <script type="module">
         import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
-        mermaid.initialize({ startOnLoad: true, theme: 'dark' });
-        window.mermaid = mermaid; // Export for dynamic re-rendering if needed
+        mermaid.initialize({ 
+            startOnLoad: false, // Don't block initial render
+            theme: 'dark',
+            securityLevel: 'loose'
+        });
+        window.mermaid = mermaid; 
     </script>
-    <script src="js/stats.js"></script>
-    <script src="js/dialect_data.js?v=2"></script>
-    <script src="js/intro.js?v=2"></script>
-    <script src="js/dialects.js?v=2"></script>
-    <script src="js/databases.js?v=2"></script>
-    <script src="js/profile.js?v=2"></script>
-    <script src="js/learn.js?v=2"></script>
-    <script src="js/practice.js?v=2"></script>
-    <script src="js/app.js?v=2"></script>
+    <script src="js/stats.js" defer></script>
+    <script src="js/dialect_data.js?v=2" defer></script>
+    <script src="js/intro.js?v=2" defer></script>
+    <script src="js/dialects.js?v=2" defer></script>
+    <script src="js/databases.js?v=2" defer></script>
+    <script src="js/profile.js?v=2" defer></script>
+    <script src="js/learn.js?v=2" defer></script>
+    <script src="js/practice.js?v=2" defer></script>
+    <script src="js/app.js?v=2" defer></script>
     <script>
-        // Initialize Lucide icons
-        lucide.createIcons();
+        // Initialize Lucide icons after DOM is ready
+        document.addEventListener('DOMContentLoaded', () => {
+            if (window.lucide) lucide.createIcons();
+        });
     </script>
 </body>
 </html>
