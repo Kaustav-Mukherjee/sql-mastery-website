@@ -316,22 +316,66 @@ window.currentDialect = 'sqlite';
 window.setDialect = function(dialectId) {
     window.currentDialect = dialectId;
     
-    // Update active state in navbar
+    // Update active state in any dialect links
     document.querySelectorAll('.nav-link-dialect').forEach(link => {
         link.classList.toggle('active', link.dataset.dialect === dialectId);
     });
 
+    // Get dialect data
+    const dialectInfo = (window.DIALECT_DATA && window.DIALECT_DATA[dialectId]) || { name: dialectId.toUpperCase(), youtube: [] };
+    const name = dialectInfo.name;
+
     // Update active dialect name in dropdown button
     const dialectBtn = document.getElementById('active-dialect-name');
     if (dialectBtn) {
-        let name = 'SQLite';
-        if (dialectId === 'sqlite') name = 'SQLite';
-        else if (window.DIALECT_DATA && window.DIALECT_DATA[dialectId]) {
-            name = window.DIALECT_DATA[dialectId].name;
-        }
         dialectBtn.innerHTML = `${name} <i data-lucide="chevron-down"></i>`;
-        if (window.lucide) lucide.createIcons();
     }
+
+    // Modern Dialect Hub Content Reconstruction
+    const hubContent = document.getElementById('dialect-hub-content');
+    if (hubContent) {
+        let html = `
+            <a href="#" class="nav-link" data-section="intro">
+                <i data-lucide="info"></i> About ${name}
+            </a>
+            <a href="#" class="nav-link" data-section="learn">
+                <i data-lucide="terminal"></i> ${name} Commands
+            </a>
+            <a href="#" class="nav-link" data-section="practice">
+                <i data-lucide="play-circle"></i> ${name} Lessons
+            </a>
+        `;
+
+        if (dialectInfo.youtube && dialectInfo.youtube.length > 0) {
+            html += `<div style="border-top: 1px solid var(--border); margin: 8px 0; padding-top: 4px; font-size: 0.7rem; color: var(--text-dim); padding-left: 12px; text-transform: uppercase; letter-spacing: 0.5px;">Video Resources</div>`;
+            dialectInfo.youtube.forEach(yt => {
+                html += `
+                    <a href="${yt.url}" target="_blank" class="nav-link-external" style="display: flex; align-items: center; gap: 10px; padding: 8px 12px; text-decoration: none; color: var(--text-muted); font-size: 0.85rem; border-radius: 6px; transition: var(--transition);">
+                        <i data-lucide="youtube" style="color: #ff0000; width: 14px; height: 14px;"></i> ${yt.title}
+                    </a>
+                `;
+            });
+        }
+
+        html += `
+            <div style="border-top: 1px solid var(--border); margin: 8px 0;"></div>
+            <a href="#" class="nav-link" data-section="dialects">
+                <i data-lucide="refresh-cw"></i> Switch Dialect
+            </a>
+        `;
+
+        hubContent.innerHTML = html;
+
+        // Re-attach listeners for new .nav-link items in the hub
+        hubContent.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                window.showSection(link.dataset.section);
+            });
+        });
+    }
+
+    if (window.lucide) lucide.createIcons();
 
     // Re-initialize all sections with the new dialect
     if (window.initIntroSection) window.initIntroSection(dialectId);
@@ -339,9 +383,9 @@ window.setDialect = function(dialectId) {
     if (window.initPracticeSection) window.initPracticeSection(dialectId);
 
     // Close mobile menu if open
-    const navLinks = document.getElementById('nav-links-container');
-    if (navLinks && navLinks.classList.contains('active')) {
-        navLinks.classList.remove('active');
+    const navLinksContainer = document.getElementById('nav-links-container');
+    if (navLinksContainer && navLinksContainer.classList.contains('active')) {
+        navLinksContainer.classList.remove('active');
         const mobileToggle = document.getElementById('nav-mobile-toggle');
         if (mobileToggle) {
             const icon = mobileToggle.querySelector('i');

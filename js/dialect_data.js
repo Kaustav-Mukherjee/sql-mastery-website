@@ -1,8 +1,29 @@
 // ===== DIALECT SPECIFIC CONTENT =====
 
 const DIALECT_DATA = {
+    sqlite: {
+        name: "SQLite",
+        youtube: [
+            { title: "SQLite in 100 Seconds", url: "https://www.youtube.com/watch?v=byHcYRpMgI4" },
+            { title: "SQLite Design Philosophy", url: "https://www.youtube.com/watch?v=Z_cX3X6K7I0" }
+        ],
+        intro: [
+            {
+                id: "sql-intro-1",
+                icon: "zap",
+                title: "Serverless & Simple",
+                content: "SQLite is a C-language library that implements a small, fast, self-contained, high-reliability, full-featured, SQL database engine."
+            }
+        ],
+        learn: [],
+        practice: []
+    },
     postgresql: {
         name: "PostgreSQL",
+        youtube: [
+            { title: "Learn PostgreSQL in 3 Hours", url: "https://www.youtube.com/watch?v=qw--VYLpxG4" },
+            { title: "Why Postgres is better than MySQL", url: "https://www.youtube.com/watch?v=nSxzE96C-Uo" }
+        ],
         intro: [
             {
                 id: "pg-intro-1",
@@ -49,6 +70,10 @@ const DIALECT_DATA = {
     },
     mysql: {
         name: "MySQL",
+        youtube: [
+            { title: "MySQL Crash Course", url: "https://www.youtube.com/watch?v=7S_tz1z_5bA" },
+            { title: "MySQL Architecture Explained", url: "https://www.youtube.com/watch?v=W66vPrv_0v8" }
+        ],
         intro: [
             {
                 id: "my-intro-1",
@@ -80,6 +105,10 @@ const DIALECT_DATA = {
     },
     sqlserver: {
         name: "SQL Server",
+        youtube: [
+            { title: "SQL Server Tutorial for Beginners", url: "https://www.youtube.com/watch?v=7GpolIT0who" },
+            { title: "What is T-SQL?", url: "https://www.youtube.com/watch?v=f-B0Y35r6Yc" }
+        ],
         intro: [
             {
                 id: "ms-intro-1",

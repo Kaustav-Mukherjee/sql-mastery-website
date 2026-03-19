@@ -22,62 +22,51 @@
 
         <div class="nav-links-container" id="nav-links-container">
             <div class="nav-links">
-                <!-- Group 1: Explore -->
-                <div class="nav-dropdown">
-                    <button class="nav-drop-btn">Explore <i data-lucide="chevron-down"></i></button>
-                    <div class="nav-drop-content">
-                        <a href="#" class="nav-link active" data-section="home" id="nav-home">
-                            <i data-lucide="home"></i> Home
-                        </a>
-                        <a href="#" class="nav-link" data-section="intro" id="nav-intro">
-                            <i data-lucide="book-open"></i> Introduction
-                        </a>
-                    </div>
-                </div>
-
-                <!-- Group 2: Mastery -->
+                <!-- Group 1: Mastery (The Journey) -->
                 <div class="nav-dropdown">
                     <button class="nav-drop-btn">Mastery <i data-lucide="chevron-down"></i></button>
                     <div class="nav-drop-content">
-                        <a href="#" class="nav-link" data-section="learn" id="nav-learn">
-                            <i data-lucide="graduation-cap"></i> Learn Commands
+                        <a href="#" class="nav-link" data-section="intro">
+                            <i data-lucide="book-open"></i> Introduction
                         </a>
-                        <a href="#" class="nav-link" data-section="practice" id="nav-practice">
-                            <i data-lucide="code-2"></i> Practice Challenges
+                        <a href="#" class="nav-link" data-section="learn">
+                            <i data-lucide="graduation-cap"></i> Command Center
+                        </a>
+                        <a href="#" class="nav-link" data-section="practice">
+                            <i data-lucide="code-2"></i> Practice Arena
                         </a>
                     </div>
                 </div>
 
-                <!-- Group 3: Dialects -->
-                <div class="nav-dropdown">
+                <!-- Group 2: Dialect Hub (The Context) - This will be dynamically updated -->
+                <div class="nav-dropdown" id="nav-dialect-hub">
                     <button class="nav-drop-btn" id="active-dialect-name">SQLite <i data-lucide="chevron-down"></i></button>
-                    <div class="nav-drop-content">
-                        <a href="#" class="nav-link-dialect active" data-dialect="sqlite" onclick="setDialect('sqlite')">
-                            <i data-lucide="database"></i> Standard (SQLite)
+                    <div class="nav-drop-content" id="dialect-hub-content">
+                        <!-- Dynamic items added via JS -->
+                        <a href="#" class="nav-link" data-section="intro">
+                            <i data-lucide="info"></i> About SQLite
                         </a>
-                        <a href="#" class="nav-link-dialect" data-dialect="postgresql" onclick="setDialect('postgresql')">
-                            <i data-lucide="database"></i> PostgreSQL
+                        <a href="#" class="nav-link" data-section="learn">
+                            <i data-lucide="terminal"></i> SQLite Commands
                         </a>
-                        <a href="#" class="nav-link-dialect" data-dialect="mysql" onclick="setDialect('mysql')">
-                            <i data-lucide="database"></i> MySQL
-                        </a>
-                        <a href="#" class="nav-link-dialect" data-dialect="sqlserver" onclick="setDialect('sqlserver')">
-                            <i data-lucide="database"></i> SQL Server
+                        <div style="border-top: 1px solid var(--border); margin: 4px 0;"></div>
+                        <a href="#" class="nav-link" data-section="dialects">
+                            <i data-lucide="refresh-cw"></i> Switch Dialect
                         </a>
                     </div>
                 </div>
 
-                <!-- Group 4: Reference -->
+                <!-- Group 3: Tools & Resources -->
                 <div class="nav-dropdown">
-                    <button class="nav-drop-btn">Resources <i data-lucide="chevron-down"></i></button>
+                    <button class="nav-drop-btn">Tools <i data-lucide="chevron-down"></i></button>
                     <div class="nav-drop-content">
-                        <a href="#" class="nav-link" data-section="databases" id="nav-databases">
-                            <i data-lucide="database"></i> Database Explorer
+                        <a href="#" class="nav-link" data-section="databases">
+                            <i data-lucide="database"></i> DB Explorer
                         </a>
-                        <a href="#" class="nav-link" data-section="dialects" id="nav-dialects">
-                            <i data-lucide="languages"></i> SQL Comparison
+                        <a href="#" class="nav-link" data-section="dialects">
+                            <i data-lucide="git-compare"></i> Compare Dialects
                         </a>
-                        <a href="#" class="nav-link" data-section="profile" id="nav-profile">
+                        <a href="#" class="nav-link" data-section="profile">
                             <i data-lucide="user"></i> My Profile
                         </a>
                     </div>
