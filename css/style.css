@@ -196,98 +196,180 @@ svg.lucide {
 /* ===== HERO ===== */
 .hero {
     text-align: center;
-    padding: 4rem 0 3rem;
+    padding: 6rem 0 5rem;
     position: relative;
+    overflow: hidden; /* to contain floating icons */
+}
+
+.hero-bg-grid {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-size: 50px 50px;
+    background-image: 
+        linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    z-index: 0;
+    pointer-events: none;
+    mask-image: radial-gradient(ellipse at center, black 40%, transparent 80%);
+    -webkit-mask-image: radial-gradient(ellipse at center, black 40%, transparent 80%);
 }
 
 .hero-glow {
     position: absolute;
-    top: -50px;
+    top: 0px;
     left: 50%;
     transform: translateX(-50%);
-    width: 700px;
-    height: 350px;
-    background: radial-gradient(ellipse, rgba(88, 166, 255, 0.08) 0%, transparent 70%);
+    width: 800px;
+    height: 400px;
+    background: radial-gradient(ellipse, rgba(88, 166, 255, 0.06) 0%, transparent 70%);
     pointer-events: none;
     z-index: 0;
 }
 
+.hero > *:not(.hero-bg-grid, .hero-glow, .floating-icon) {
+    position: relative;
+    z-index: 2;
+}
+
+/* Floating Icons */
+.floating-icon {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    z-index: 1;
+    animation: float 6s ease-in-out infinite;
+    opacity: 0.9;
+}
+.floating-icon i {
+    width: 60px;
+    height: 60px;
+    padding: 14px;
+    border-radius: 16px;
+    background: var(--bg-primary);
+    border: 1px solid var(--border);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+}
+.floating-icon span {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text-muted);
+}
+/* Positions */
+.icon-1 { top: 15%; left: 15%; animation-delay: 0s; }
+.icon-1 i { color: #e3b341; }
+.icon-2 { top: 50%; left: 10%; animation-delay: 1s; }
+.icon-2 i { color: #f78166; }
+.icon-3 { top: 10%; right: 15%; animation-delay: 2s; }
+.icon-3 i { color: var(--accent); }
+.icon-4 { top: 50%; right: 12%; animation-delay: 0.5s; }
+.icon-4 i { color: var(--purple); }
+
+@keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-15px); }
+    100% { transform: translateY(0px); }
+}
+
+@media (max-width: 900px) {
+    .floating-icon { display: none; }
+}
+
 .hero-badge {
     display: inline-block;
-    padding: 4px 14px;
+    padding: 6px 16px;
     border-radius: 100px;
-    background: var(--accent-glow);
-    border: 1px solid rgba(88, 166, 255, 0.25);
-    color: var(--accent);
-    font-size: 0.8rem;
+    background: var(--bg-hover);
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    font-size: 0.85rem;
     font-weight: 600;
-    margin-bottom: 1.5rem;
-    position: relative;
-    z-index: 1;
+    margin-bottom: 2rem;
 }
 
 .hero-title {
-    font-size: clamp(2.5rem, 6vw, 4rem);
+    font-size: clamp(2.5rem, 5vw, 4rem);
     font-weight: 800;
-    line-height: 1.15;
-    margin-bottom: 1rem;
-    position: relative;
-    z-index: 1;
+    line-height: 1.3;
+    margin-bottom: 1.5rem;
 }
 
-.gradient-text {
-    background: linear-gradient(135deg, var(--accent) 0%, var(--purple) 50%, #f78166 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+/* Highlight Boxes */
+.highlight-box {
+    display: inline-block;
+    padding: 2px 16px;
+    border-radius: 8px;
+    color: #ffffff;
+    font-weight: 800;
+    transform: rotate(-2deg);
+    margin: 0 6px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    line-height: normal;
+    vertical-align: middle;
 }
+.bg-blue { background-color: var(--accent); transform: rotate(2deg); }
+.bg-yellow { background-color: #e3b341; color: #1a1a1a; transform: rotate(-2deg); }
 
 .hero-subtitle {
-    font-size: 1.1rem;
+    font-size: 1.15rem;
     color: var(--text-muted);
-    max-width: 580px;
-    margin: 0 auto 2rem;
+    max-width: 600px;
+    margin: 0 auto 2.5rem;
     line-height: 1.7;
-    position: relative;
-    z-index: 1;
 }
 
 .hero-actions {
     display: flex;
-    gap: 12px;
+    gap: 16px;
     justify-content: center;
     flex-wrap: wrap;
-    margin-bottom: 3.5rem;
-    position: relative;
-    z-index: 1;
+    margin-bottom: 5rem;
 }
 
-.hero-stats {
-    display: flex;
-    gap: 3rem;
-    justify-content: center;
-    flex-wrap: wrap;
-    position: relative;
-    z-index: 1;
+/* Collaboration */
+.hero-collaboration {
+    margin-top: 5rem;
+    padding-top: 3rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
 }
-
-.stat-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 2px;
+.collab-title {
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
 }
-
-.stat-number {
-    font-size: 1.75rem;
-    font-weight: 800;
-    color: var(--green);
-}
-
-.stat-label {
-    font-size: 0.8rem;
+.collab-subtitle {
+    font-size: 0.95rem;
     color: var(--text-muted);
-    font-weight: 500;
+    margin-bottom: 2.5rem;
+}
+.collab-logos {
+    display: flex;
+    justify-content: center;
+    gap: 3.5rem;
+    flex-wrap: wrap;
+    align-items: center;
+}
+.collab-logos span {
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: var(--text-muted);
+    letter-spacing: -0.5px;
+    opacity: 0.5;
+    transition: opacity var(--transition), color var(--transition);
+}
+.collab-logos span:hover {
+    opacity: 1;
+    color: var(--text-primary);
+}
+
+.btn--yellow {
+    background-color: #e3b341;
+    border-color: #e3b341;
+    color: #1a1a1a;
+}
+.btn--yellow:hover {
+    background-color: #d1a338;
 }
 
 /* ===== BUTTONS (GitHub-style) ===== */
