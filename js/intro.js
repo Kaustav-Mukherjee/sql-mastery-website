@@ -136,52 +136,15 @@ const INTRO_TOPICS = [
                 </div>
                 <div class="mermaid-container"></div>
             </div>
-            <div class="intro-facts">
-                <div class="intro-fact">
-                    <div class="intro-fact-label">Cloud</div>
-                    <div class="intro-fact-value">AWS, Google Cloud, Azure</div>
-                </div>
-                <div class="intro-fact">
-                    <div class="intro-fact-label">Local</div>
-                    <div class="intro-fact-value">SQLite (File-based, inside this app!)</div>
-                </div>
-            </div>
         `
     }
 ];
 
 // ===== YOUTUBE VIDEO LECTURES =====
 const YOUTUBE_VIDEOS = [
-    {
-        id: 'qw--VYLpxG4',
-        title: 'SQL Tutorial - Full Database Course for Beginners',
-        channel: 'freeCodeCamp.org',
-    },
-    {
-        id: 'HXV3zeQKqGY',
-        title: 'SQL Full Course 2025 — Beginner to Advanced',
-        channel: 'freeCodeCamp.org',
-    },
-    {
-        id: '7S_tz1z_5bA',
-        title: 'MySQL Tutorial for Beginners (Full Course)',
-        channel: 'Programming with Mosh',
-    },
-    {
-        id: 'zbMHLJ0dY4w',
-        title: 'Learn SQL in 60 Minutes',
-        channel: 'Web Dev Simplified',
-    },
-    {
-        id: 'p3qvj9hO_Bo',
-        title: 'Learn SQL in 1 Hour - SQL Basics for Beginners',
-        channel: 'Programming with Mosh',
-    },
-    {
-        id: '9Pzj7Aj25lw',
-        title: 'SQL Crash Course — Beginner to Intermediate',
-        channel: 'Traversy Media',
-    },
+    { id: 'HXV3zeQKqGY', title: 'SQL Full Course 2025 — Beginner to Advanced', channel: 'freeCodeCamp.org' },
+    { id: '7S_tz1z_5bA', title: 'MySQL Tutorial for Beginners (Full Course)', channel: 'Programming with Mosh' },
+    { id: '9Pzj7Aj25lw', title: 'SQL Crash Course — Beginner to Intermediate', channel: 'Traversy Media' },
 ];
 
 // ===== RENDER FUNCTIONS =====
@@ -203,18 +166,9 @@ function renderIntroCard(topic) {
 function renderVideoCard(video) {
     return `
         <div class="video-card">
-            <iframe 
-                src="https://www.youtube.com/embed/${video.id}" 
-                title="${video.title}" 
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                allowfullscreen
-                loading="lazy">
-            </iframe>
+            <iframe src="https://www.youtube.com/embed/${video.id}" title="${video.title}" allowfullscreen loading="lazy"></iframe>
             <div class="video-card-info">
-                <div class="video-card-title">
-                    <i data-lucide="play-circle" style="width: 14px; height: 14px; color: var(--accent);"></i>
-                    ${video.title}
-                </div>
+                <div class="video-card-title">${video.title}</div>
                 <div class="video-card-channel">${video.channel}</div>
             </div>
         </div>
@@ -222,69 +176,80 @@ function renderVideoCard(video) {
 }
 
 // ===== INITIALIZATION =====
-function initIntroSection() {
-    // Render topic cards
+window.initIntroSection = function(dialectId = null) {
     const cardsContainer = document.getElementById('intro-cards');
-    if (cardsContainer) {
-        cardsContainer.innerHTML = INTRO_TOPICS.map(renderIntroCard).join('');
+    const videosContainer = document.getElementById('intro-videos');
+    if (!cardsContainer) return;
+
+    // Use Dialect Data if available, fallback to default
+    let topics = INTRO_TOPICS;
+    let name = "Standard SQL";
+    if (dialectId && window.DIALECT_DATA && window.DIALECT_DATA[dialectId]) {
+        topics = window.DIALECT_DATA[dialectId].intro || topics;
+        name = window.DIALECT_DATA[dialectId].name;
     }
 
-    // Render videos
-    const videosContainer = document.getElementById('intro-videos');
+    // Update section description with dialect name
+    const sectionDesc = document.querySelector('#section-intro .section-desc');
+    if (sectionDesc) {
+        sectionDesc.innerHTML = `Learning the fundamentals of <strong>${name}</strong>. Topics include core concepts, architecture, and basic operations.`;
+    }
+
+    cardsContainer.innerHTML = topics.map(renderIntroCard).join('');
+
     if (videosContainer) {
         videosContainer.innerHTML = `
-            <div class="intro-videos-title">
-                <i data-lucide="video" style="margin-right: 8px;"></i>
-                Recommended Video Lectures
-            </div>
-            <div class="video-grid">
-                ${YOUTUBE_VIDEOS.map(renderVideoCard).join('')}
-            </div>
+            <div class="intro-videos-title"><i data-lucide="video"></i> Recommended Video Lectures</div>
+            <div class="video-grid">${YOUTUBE_VIDEOS.map(renderVideoCard).join('')}</div>
         `;
     }
 
-    // Initialize Lucide icons
-    if (window.lucide) {
-        lucide.createIcons();
-    }
+    if (window.lucide) lucide.createIcons();
 
     // Auto-open first card
-    const firstCard = document.getElementById(`intro-${INTRO_TOPICS[0].id}`);
-    if (firstCard) firstCard.classList.add('open');
+    if (topics.length > 0) {
+        const firstCard = document.getElementById(`intro-${topics[0].id}`);
+        if (firstCard) firstCard.classList.add('open');
+    }
 
-    // Trigger mermaid render if available
+    // Trigger mermaid
     setTimeout(() => {
         if (window.mermaid) {
-            window.mermaid.run({ querySelector: '.mermaid' }).catch(err => console.error("Mermaid error:", err));
+            window.mermaid.run({ querySelector: '.mermaid' }).catch(err => {});
         }
     }, 200);
-}
+};
 
 // ===== INTERACTIONS =====
-function toggleIntroCard(id) {
+window.toggleIntroCard = function(id) {
     const card = document.getElementById(`intro-${id}`);
     if (card) {
         card.classList.toggle('open');
         
-        // Dynamic Mermaid Rendering
+        // Record activity when opening
+        if (card.classList.contains('open') && window.recordActivity) {
+            window.recordActivity();
+        }
+        
         if (card.classList.contains('open') && window.mermaid) {
             const containers = card.querySelectorAll('.mermaid-container');
             const sources = card.querySelectorAll('.mermaid-source');
             
             for (let i = 0; i < sources.length; i++) {
                 if (!containers[i].dataset.rendered) {
-                    const mermaidId = 'mermaid-intro-' + Math.random().toString(36).substr(2, 9);
+                    const mermaidId = 'm-' + Math.random().toString(36).substr(2, 5);
                     window.mermaid.render(mermaidId, sources[i].textContent.trim())
                         .then(result => {
                             containers[i].innerHTML = result.svg;
                             containers[i].dataset.rendered = 'true';
-                        })
-                        .catch(err => {
-                            console.error('Mermaid render error:', err);
-                            containers[i].innerHTML = `<span style="color:red; font-size:12px; display:block; padding:10px;">Graphic failed: ${err.message || err}</span>`;
                         });
                 }
             }
         }
     }
-}
+};
+
+// Start on load
+document.addEventListener('DOMContentLoaded', () => {
+    initIntroSection();
+});

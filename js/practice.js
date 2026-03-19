@@ -331,24 +331,26 @@ function renderChallenge(challenge, mode, index) {
 
 function renderChallenges(mode) {
     const container = document.getElementById('practice-challenges');
-    let challenges = CHALLENGES[mode] || [];
+    const allChallenges = window.currentPracticeChallenges || CHALLENGES;
+    let challenges = allChallenges[mode] || [];
     
     // Pick 5 random challenges to show at a time to avoid overwhelming the user
-    // This addresses the "refresh" requirement
     const shuffled = [...challenges].sort(() => 0.5 - Math.random());
     const selected = shuffled.slice(0, 5);
+
+    const modeLabels = { beginner: 'Beginner', intermediate: 'Intermediate', advanced: 'Advanced' };
 
     container.innerHTML = `
         <div class="practice-controls">
             <button class="btn btn--outline btn--sm" onclick="renderChallenges('${mode}')">
                 <i data-lucide="refresh-cw" style="width:14px;height:14px;margin-right:4px;"></i> Refresh Challenges
             </button>
-            <p class="text-muted" style="font-size:12px;">Showing 5 of ${challenges.length} ${mode} challenges</p>
+            <p class="text-muted" style="font-size:12px;">Showing ${selected.length} of ${challenges.length} ${modeLabels[mode]} challenges</p>
         </div>
         ${selected.map((ch, i) => renderChallenge(ch, mode, i)).join('')}
     `;
     
-    // Re-initialize icons for the refresh button
+    // Re-initialize icons
     if (window.lucide) lucide.createIcons();
 }
 
@@ -381,6 +383,9 @@ function runPracticeQuery(id) {
         }
         
         resultDiv.innerHTML = renderQueryResults(lastResults || [], sql);
+        
+        // Record activity
+        if (window.recordActivity) window.recordActivity();
     } catch (err) {
         resultDiv.innerHTML = `<div class="result-error">❌ ${err.message}</div>`;
     }
@@ -407,16 +412,50 @@ function toggleAnswer(id) {
     }
 }
 
-function initPracticeSection() {
+window.initPracticeSection = function(dialectId = null) {
+    let challenges = CHALLENGES;
+
+    if (dialectId && window.DIALECT_DATA && window.DIALECT_DATA[dialectId]) {
+        const dialectData = window.DIALECT_DATA[dialectId];
+        if (dialectData.practice) {
+            // Mix dialect challenges into categories
+            challenges = JSON.parse(JSON.stringify(CHALLENGES)); // Deep copy
+            for (const [mode, chs] of Object.entries(dialectData.practice)) {
+                if (!challenges[mode]) challenges[mode] = [];
+                challenges[mode] = [...challenges[mode], ...chs];
+            }
+        }
+        
+        // Update section description
+        const sectionDesc = document.querySelector('#section-practice .section-desc');
+        if (sectionDesc) {
+            sectionDesc.innerHTML = `Sharpen your <strong>${dialectData.name}</strong> skills with targeted challenges and real-world scenarios.`;
+        }
+    } else {
+        const sectionDesc = document.querySelector('#section-practice .section-desc');
+        if (sectionDesc) {
+            sectionDesc.innerHTML = `Sharpen your SQL skills with interactive challenges ranging from beginner to advanced levels.`;
+        }
+    }
+
+    window.currentPracticeChallenges = challenges;
+
     // Tab switching
     document.querySelectorAll('.practice-tab').forEach(tab => {
-        tab.addEventListener('click', () => {
+        // Clone to clear old listeners
+        const newTab = tab.cloneNode(true);
+        tab.parentNode.replaceChild(newTab, tab);
+        
+        newTab.addEventListener('click', () => {
             document.querySelectorAll('.practice-tab').forEach(t => t.classList.remove('active'));
-            tab.classList.add('active');
-            renderChallenges(tab.dataset.mode);
+            newTab.classList.add('active');
+            renderChallenges(newTab.dataset.mode);
         });
     });
 
-    // Render default mode
-    renderChallenges('beginner');
+    // Render current active mode
+    const activeTab = document.querySelector('.practice-tab.active') || document.querySelector('.practice-tab');
+    if (activeTab) {
+        renderChallenges(activeTab.dataset.mode);
+    }
 }

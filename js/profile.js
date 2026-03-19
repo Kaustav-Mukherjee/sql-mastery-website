@@ -81,16 +81,8 @@ function initProfileSection() {
                     </div>
                 </div>
 
-                <!-- Pinned Projects -->
-                <div class="pinned-section">
-                    <div class="pinned-header">
-                        <h3 class="pinned-title">Pinned</h3>
-                        <span style="font-size: 0.75rem; color: var(--text-muted); cursor: pointer;">Customize your pins</span>
-                    </div>
-                    <div class="pinned-grid">
-                        ${PINNED_PROJECTS.map(renderPinnedCard).join('')}
-                    </div>
-                </div>
+                <!-- Pinned Projects hidden per user request -->
+                <!-- <div class="pinned-section">...</div> -->
             </main>
         </div>
     `;
@@ -103,57 +95,45 @@ function initProfileSection() {
 }
 
 function renderPinnedCard(project) {
-    return `
-        <div class="pinned-card">
-            <div class="pinned-card-name">
-                <i data-lucide="book" style="width: 14px; color: var(--text-muted);"></i>
-                ${project.name}
-            </div>
-            <p class="pinned-card-desc">${project.desc}</p>
-            <div class="pinned-card-meta">
-                <span><span class="lang-dot"></span> ${project.lang}</span>
-                <span><i data-lucide="star" style="width: 12px; vertical-align: middle;"></i> ${project.stars}</span>
-            </div>
-        </div>
-    `;
+    return ``; // Not used anymore
 }
 
 function generateContributionGraph() {
     const graph = document.getElementById('contribution-graph');
     if (!graph) return;
 
-    let contributionData = JSON.parse(localStorage.getItem('sql_contribution_graph'));
     let totalContributions = 0;
-
-    if (!contributionData) {
-        contributionData = [];
-        for (let i = 0; i < 371; i++) {
-            const random = Math.random();
-            let level = '';
-            if (random > 0.95) level = 'level-4';
-            else if (random > 0.85) level = 'level-3';
-            else if (random > 0.7) level = 'level-2';
-            else if (random > 0.4) level = 'level-1';
-            contributionData.push(level);
-        }
-        localStorage.setItem('sql_contribution_graph', JSON.stringify(contributionData));
-    }
+    const today = new Date();
+    const oneYearAgo = new Date();
+    oneYearAgo.setDate(today.getDate() - 370);
 
     let html = '';
-    contributionData.forEach((level, i) => {
-        html += `<div class="streak-day ${level}" title="Contribution on day ${i}"></div>`;
-        if (level === 'level-4') totalContributions += 4;
-        else if (level === 'level-3') totalContributions += 3;
-        else if (level === 'level-2') totalContributions += 2;
-        else if (level === 'level-1') totalContributions += 1;
-    });
+    
+    // Generate 371 days (GitHub style grid)
+    for (let i = 0; i < 371; i++) {
+        const date = new Date(oneYearAgo);
+        date.setDate(oneYearAgo.getDate() + i);
+        const dateString = date.toISOString().split('T')[0];
+        
+        const count = window.getActivityForDate ? window.getActivityForDate(dateString) : 0;
+        totalContributions += count;
+        
+        let level = '';
+        if (count >= 10) level = 'level-4';
+        else if (count >= 5) level = 'level-3';
+        else if (count >= 3) level = 'level-2';
+        else if (count >= 1) level = 'level-1';
+        
+        const formattedDate = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+        html += `<div class="streak-day ${level}" title="${count} contributions on ${formattedDate}"></div>`;
+    }
 
     graph.innerHTML = html;
     
-    setTimeout(() => {
-        const titleObj = document.querySelector('.streak-title');
-        if (titleObj) titleObj.textContent = `${totalContributions} contributions in the last year`;
-    }, 10);
+    const titleObj = document.querySelector('.streak-title');
+    if (titleObj) {
+        titleObj.textContent = `${totalContributions} contributions in the last year`;
+    }
 }
 
 // GitHub Connection

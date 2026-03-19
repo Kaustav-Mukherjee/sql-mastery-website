@@ -5,6 +5,9 @@
     const sections = document.querySelectorAll('.section');
     const logoLink = document.getElementById('nav-logo-link');
     const authContainer = document.getElementById('nav-auth-container');
+    const mobileToggle = document.getElementById('nav-mobile-toggle');
+    const navLinksContainer = document.getElementById('nav-links-container');
+    const dropdownBtns = document.querySelectorAll('.nav-drop-btn');
 
     function updateAuthUI() {
         const user = JSON.parse(localStorage.getItem('sql_mastery_user'));
@@ -47,6 +50,19 @@
             link.classList.toggle('active', link.dataset.section === sectionId);
         });
 
+        // Close mobile menu if open
+        if (navLinksContainer) navLinksContainer.classList.remove('active');
+        if (mobileToggle) {
+            const icon = mobileToggle.querySelector('i');
+            if (icon && window.lucide) {
+                icon.setAttribute('data-lucide', 'menu');
+                lucide.createIcons();
+            }
+        }
+
+        // Close all dropdowns in mobile view
+        document.querySelectorAll('.nav-dropdown').forEach(d => d.classList.remove('active'));
+
         // Update section visibility
         sections.forEach(sec => {
             sec.classList.remove('section--active');
@@ -80,6 +96,33 @@
     // Export showSection to window
     window.showSection = showSection;
 
+    // Mobile Toggle Logic
+    if (mobileToggle) {
+        mobileToggle.addEventListener('click', () => {
+            const isActive = navLinksContainer.classList.toggle('active');
+            const icon = mobileToggle.querySelector('i');
+            if (icon && window.lucide) {
+                icon.setAttribute('data-lucide', isActive ? 'x' : 'menu');
+                lucide.createIcons();
+            }
+        });
+    }
+
+    // Dropdown toggle logic for mobile
+    dropdownBtns.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            if (window.innerWidth <= 992) {
+                const dropdown = btn.closest('.nav-dropdown');
+                dropdown.classList.toggle('active');
+                
+                // Close other dropdowns
+                document.querySelectorAll('.nav-dropdown').forEach(d => {
+                    if (d !== dropdown) d.classList.remove('active');
+                });
+            }
+        });
+    });
+
     navLinks.forEach(link => {
         link.addEventListener('click', (e) => {
             e.preventDefault();
@@ -93,8 +136,12 @@
     });
 
     // Hero buttons
-    document.getElementById('hero-learn-btn').addEventListener('click', () => showSection('intro'));
-    document.getElementById('hero-practice-btn').addEventListener('click', () => showSection('practice'));
+    if (document.getElementById('hero-learn-btn')) {
+        document.getElementById('hero-learn-btn').addEventListener('click', () => showSection('intro'));
+    }
+    if (document.getElementById('hero-practice-btn')) {
+        document.getElementById('hero-practice-btn').addEventListener('click', () => showSection('practice'));
+    }
 
     // Check auth on init
     updateAuthUI();
@@ -128,9 +175,13 @@
     }
 
     // ===== INITIALIZE SECTIONS =====
-    initIntroSection();
-    initLearnSection();
-    initPracticeSection();
+    if (window.setDialect) {
+        window.setDialect('sqlite');
+    } else {
+        if (window.initIntroSection) initIntroSection();
+        if (window.initLearnSection) initLearnSection();
+        if (window.initPracticeSection) initPracticeSection();
+    }
 
     // Initial icon render
     if (window.lucide) {
@@ -257,4 +308,47 @@ function showToast(message) {
     setTimeout(() => {
         toast.classList.remove('show');
     }, 3000);
+}
+
+// ===== DIALECT MANAGEMENT =====
+window.currentDialect = 'sqlite';
+
+window.setDialect = function(dialectId) {
+    window.currentDialect = dialectId;
+    
+    // Update active state in navbar
+    document.querySelectorAll('.nav-link-dialect').forEach(link => {
+        link.classList.toggle('active', link.dataset.dialect === dialectId);
+    });
+
+    // Update active dialect name in dropdown button
+    const dialectBtn = document.getElementById('active-dialect-name');
+    if (dialectBtn) {
+        let name = 'SQLite';
+        if (dialectId === 'sqlite') name = 'SQLite';
+        else if (window.DIALECT_DATA && window.DIALECT_DATA[dialectId]) {
+            name = window.DIALECT_DATA[dialectId].name;
+        }
+        dialectBtn.innerHTML = `${name} <i data-lucide="chevron-down"></i>`;
+        if (window.lucide) lucide.createIcons();
+    }
+
+    // Re-initialize all sections with the new dialect
+    if (window.initIntroSection) window.initIntroSection(dialectId);
+    if (window.initLearnSection) window.initLearnSection(dialectId);
+    if (window.initPracticeSection) window.initPracticeSection(dialectId);
+
+    // Close mobile menu if open
+    const navLinks = document.getElementById('nav-links-container');
+    if (navLinks && navLinks.classList.contains('active')) {
+        navLinks.classList.remove('active');
+        const mobileToggle = document.getElementById('nav-mobile-toggle');
+        if (mobileToggle) {
+            const icon = mobileToggle.querySelector('i');
+            if (icon && window.lucide) {
+                icon.setAttribute('data-lucide', 'menu');
+                lucide.createIcons();
+            }
+        }
+    }
 }

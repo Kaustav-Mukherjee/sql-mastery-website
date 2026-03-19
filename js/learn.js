@@ -777,16 +777,47 @@ function renderLearnCard(cmd) {
 }
 
 // ===== INITIALIZATION =====
-function initLearnSection() {
+window.initLearnSection = function(dialectId = null) {
+    let commands = SQL_COMMANDS;
+    let categories = CATEGORIES;
+
+    if (dialectId && window.DIALECT_DATA && window.DIALECT_DATA[dialectId]) {
+        const dialectData = window.DIALECT_DATA[dialectId];
+        if (dialectData.learn) {
+            commands = [...SQL_COMMANDS, ...dialectData.learn];
+            // Update categories if needed
+            const newCats = [...new Set(dialectData.learn.map(c => c.category))];
+            categories = [...new Set([...CATEGORIES, ...newCats])];
+        }
+        
+        // Update section description
+        const sectionDesc = document.querySelector('#section-learn .section-desc');
+        if (sectionDesc) {
+            sectionDesc.innerHTML = `Exploring <strong>${dialectData.name}</strong> commands and syntax extensions.`;
+        }
+    } else {
+        const sectionDesc = document.querySelector('#section-learn .section-desc');
+        if (sectionDesc) {
+            sectionDesc.innerHTML = `Master the core SQL commands used to query and manage data in any relational database.`;
+        }
+    }
+
+    // Store current commands for filtering
+    window.currentLearnCommands = commands;
+
     // Render category filters
     const catContainer = document.getElementById('learn-categories');
-    catContainer.innerHTML = CATEGORIES.map(cat =>
-        `<button class="category-btn${cat === 'All' ? ' active' : ''}" data-cat="${cat}" onclick="filterCategory('${cat}')">${cat}</button>`
-    ).join('');
+    if (catContainer) {
+        catContainer.innerHTML = categories.map(cat =>
+            `<button class="category-btn${cat === 'All' ? ' active' : ''}" data-cat="${cat}" onclick="filterCategory('${cat}')">${cat}</button>`
+        ).join('');
+    }
 
     // Render all cards
     const cardsContainer = document.getElementById('learn-cards');
-    cardsContainer.innerHTML = SQL_COMMANDS.map(renderLearnCard).join('');
+    if (cardsContainer) {
+        cardsContainer.innerHTML = commands.map(renderLearnCard).join('');
+    }
 }
 
 // ===== INTERACTIONS =====
@@ -801,6 +832,8 @@ function filterCategory(cat) {
         btn.classList.toggle('active', btn.dataset.cat === cat);
     });
 
+    const commands = window.currentLearnCommands || SQL_COMMANDS;
+    
     // Show/hide cards
     document.querySelectorAll('.learn-card').forEach(card => {
         if (cat === 'All' || card.dataset.category === cat) {
@@ -812,7 +845,8 @@ function filterCategory(cat) {
 }
 
 function resetLearnEditor(id) {
-    const cmd = SQL_COMMANDS.find(c => c.id === id);
+    const commands = window.currentLearnCommands || SQL_COMMANDS;
+    const cmd = commands.find(c => c.id === id);
     if (cmd) {
         document.getElementById(`editor-${id}`).value = cmd.example;
         document.getElementById(`result-${id}`).innerHTML = '';
@@ -837,6 +871,9 @@ function runLearnQuery(id) {
     try {
         const results = window.sqlDB.exec(sql);
         resultDiv.innerHTML = renderQueryResults(results, sql);
+        
+        // Record activity
+        if (window.recordActivity) window.recordActivity();
     } catch (err) {
         resultDiv.innerHTML = `<div class="result-error">❌ ${err.message}</div>`;
     }

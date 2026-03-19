@@ -96,8 +96,10 @@ svg.lucide {
     align-items: center;
     padding: 0 var(--spacing-5);
     height: var(--navbar-height);
-    background: #161b22;
+    background: #1d2127; /* Slightly lighter for depth */
     border-bottom: 1px solid var(--border);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     gap: 16px;
 }
 
@@ -107,59 +109,201 @@ svg.lucide {
     gap: 8px;
     text-decoration: none;
     color: var(--text);
-    font-weight: 600;
-    font-size: 1rem;
+    font-weight: 700;
+    font-size: 1.1rem;
     flex-shrink: 0;
 }
 
-.logo-icon svg {
-    color: var(--text);
+.logo-accent {
+    background: linear-gradient(135deg, var(--accent-blue), #8b5cf6);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
-.logo-accent {
-    color: var(--text-muted);
+/* Nav Container - handles centering */
+.nav-links-container {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .nav-links {
     display: flex;
     align-items: center;
-    gap: 2px;
-    flex-grow: 1;
-    overflow-x: auto;
-    scrollbar-width: none; /* Firefox */
-    -ms-overflow-style: none;  /* IE and Edge */
-}
-.nav-links::-webkit-scrollbar {
-    display: none; /* Chrome, Safari and Opera */
+    gap: 12px;
 }
 
-.nav-link {
-    text-decoration: none;
-    color: var(--text);
-    font-size: 0.9rem;
-    padding: 6px 12px;
-    border-radius: var(--radius);
-    transition: var(--transition);
+/* Dropdown Styles */
+.nav-dropdown {
     position: relative;
+    padding: 10px 0;
 }
 
-.nav-link:hover {
+.nav-drop-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-dim);
+    font-size: 0.9rem;
+    font-weight: 500;
+    padding: 8px 12px;
+    border-radius: var(--radius);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: var(--transition);
+}
+
+.nav-drop-btn i {
+    width: 14px;
+    height: 14px;
+    transition: transform 0.3s ease;
+}
+
+.nav-drop-btn:hover {
+    color: var(--text);
     background: rgba(110, 118, 129, 0.12);
 }
 
-.nav-link.active {
-    font-weight: 600;
-    border-radius: var(--radius) var(--radius) 0 0;
+.nav-dropdown:hover .nav-drop-btn i {
+    transform: rotate(180deg);
 }
 
-.nav-link.active::after {
-    content: '';
+.nav-drop-content {
     position: absolute;
-    bottom: -14px; /* Adjust to hit the bottom of the navbar */
-    left: 0;
-    right: 0;
-    height: 2px;
-    background-color: #f78166;
+    top: 90%;
+    left: 50%;
+    transform: translateX(-50%) translateY(10px);
+    background: #161b22;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    min-width: 200px;
+    padding: 8px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 1001;
+}
+
+.nav-dropdown:hover .nav-drop-content {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0);
+}
+
+.nav-drop-content a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    text-decoration: none;
+    color: var(--text-dim);
+    font-size: 0.85rem;
+    border-radius: var(--radius);
+    transition: var(--transition);
+}
+
+.nav-drop-content a i {
+    width: 16px;
+    height: 16px;
+}
+
+.nav-drop-content a:hover {
+    background: rgba(110, 118, 129, 0.12);
+    color: var(--accent-blue);
+}
+
+.nav-drop-content a.active {
+    background: rgba(31, 111, 235, 0.1);
+    color: var(--accent-blue);
+}
+
+/* Mobile Toggle */
+.nav-mobile-toggle {
+    display: none;
+    background: transparent;
+    border: none;
+    color: var(--text);
+    cursor: pointer;
+    padding: 8px;
+}
+
+/* Responsive Navbar */
+@media (max-width: 992px) {
+    .nav-mobile-toggle {
+        display: block;
+        order: 2;
+    }
+
+    .nav-logo {
+        order: 1;
+    }
+
+    .nav-right {
+        display: none; /* Hide login on mobile navbar, put it in menu */
+    }
+
+    .nav-links-container {
+        position: fixed;
+        top: var(--navbar-height);
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: #0d1117;
+        flex-direction: column;
+        justify-content: flex-start;
+        padding: 40px var(--spacing-5);
+        transform: translateX(100%);
+        transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        z-index: 999;
+    }
+
+    .nav-links-container.active {
+        transform: translateX(0);
+    }
+
+    .nav-links {
+        flex-direction: column;
+        width: 100%;
+        gap: 20px;
+    }
+
+    .nav-dropdown {
+        width: 100%;
+    }
+
+    .nav-drop-btn {
+        width: 100%;
+        justify-content: space-between;
+        font-size: 1.1rem;
+        padding: 12px;
+        border-bottom: 1px solid var(--border);
+    }
+
+    .nav-drop-content {
+        position: static;
+        transform: none;
+        opacity: 1;
+        visibility: visible;
+        background: transparent;
+        border: none;
+        box-shadow: none;
+        padding-left: 20px;
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease;
+    }
+
+    .nav-dropdown.active .nav-drop-content {
+        max-height: 500px;
+    }
+
+    .nav-dropdown.active .nav-drop-btn i {
+        transform: rotate(180deg);
+    }
 }
 
 .nav-right {
