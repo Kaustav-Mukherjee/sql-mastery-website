@@ -171,6 +171,11 @@
 
     <!-- Scripts -->
     <script src="https://sql.js.org/dist/sql-wasm.js"></script>
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        mermaid.initialize({ startOnLoad: true, theme: 'dark' });
+        window.mermaid = mermaid; // Export for dynamic re-rendering if needed
+    </script>
     <script src="js/intro.js"></script>
     <script src="js/databases.js"></script>
     <script src="js/profile.js"></script>

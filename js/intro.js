@@ -10,6 +10,15 @@ const INTRO_TOPICS = [
                 Think of it like a digital filing cabinet — instead of papers in folders, you have 
                 <strong>data organized in tables</strong> (like spreadsheets with rows and columns).
             </p>
+            <div class="intro-diagram" style="background:#010409; padding: 16px; border-radius:6px; margin:16px 0; border:1px solid #30363d; text-align:center;">
+                <div class="mermaid">
+                    graph LR
+                    App[Client/App] -->|Requests Data| RDBMS[(Database)]
+                    RDBMS -->|Returns Data| App
+                    style App fill:#1f6feb,stroke:#58a6ff,color:#fff
+                    style RDBMS fill:#238636,stroke:#2ea043,color:#fff
+                </div>
+            </div>
             <div class="intro-facts">
                 <div class="intro-fact">
                     <div class="intro-fact-label">Stores data in</div>
@@ -35,6 +44,16 @@ const INTRO_TOPICS = [
             <p class="intro-text">
                 SQL reads like English: <em>"Get name and salary from employees where department is Engineering."</em>
             </p>
+            <div class="intro-diagram" style="background:#010409; padding: 16px; border-radius:6px; margin:16px 0; border:1px solid #30363d; text-align:center;">
+                <div class="mermaid">
+                    graph LR
+                    User[You] -.->|Write SQL| Engine[SQL Engine]
+                    Engine -->|Execute| Data[(Tables)]
+                    style User fill:#8957e5,stroke:#d2a8ff,color:#fff
+                    style Engine fill:#1f6feb,stroke:#58a6ff,color:#fff
+                    style Data fill:#238636,stroke:#2ea043,color:#fff
+                </div>
+            </div>
         `
     },
     {
@@ -101,6 +120,19 @@ const INTRO_TOPICS = [
                 A <strong>server</strong> (or DBMS) is the software engine that runs 24/7 to store your data and 
                 process your SQL queries. Common examples include PostgreSQL, MySQL, and SQL Server.
             </p>
+            <div class="intro-diagram" style="background:#010409; padding: 16px; border-radius:6px; margin:16px 0; border:1px solid #30363d; text-align:center;">
+                <div class="mermaid">
+                    graph LR
+                    Web[Web Browser] -->|API Request| Backend[App Server]
+                    Backend -->|SQL Query| DB[(DB Server)]
+                    DB -.->|SQL Result| Backend
+                    Backend -.->|Data/HTML| Web
+                    
+                    style Web fill:#da3633,stroke:#ff7b72,color:#fff
+                    style Backend fill:#8957e5,stroke:#d2a8ff,color:#fff
+                    style DB fill:#238636,stroke:#2ea043,color:#fff
+                </div>
+            </div>
             <div class="intro-facts">
                 <div class="intro-fact">
                     <div class="intro-fact-label">Cloud</div>
@@ -216,6 +248,13 @@ function initIntroSection() {
     // Auto-open first card
     const firstCard = document.getElementById(`intro-${INTRO_TOPICS[0].id}`);
     if (firstCard) firstCard.classList.add('open');
+
+    // Trigger mermaid render if available
+    setTimeout(() => {
+        if (window.mermaid) {
+            window.mermaid.run({ querySelector: '.mermaid' }).catch(err => console.error("Mermaid error:", err));
+        }
+    }, 200);
 }
 
 // ===== INTERACTIONS =====
