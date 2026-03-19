@@ -163,35 +163,100 @@ function handleGitHubConnect() {
 }
 
 function showEditProfile() {
-    const sidebar = document.querySelector('.profile-sidebar');
-    const actions = document.getElementById('profile-actions');
-    const meta = document.getElementById('profile-meta-display');
-    const bio = document.querySelector('.user-bio');
-    const nameH1 = document.querySelector('.user-name');
+    const container = document.querySelector('.profile-container');
+    const user = JSON.parse(localStorage.getItem('sql_mastery_user')) || {};
+    
+    // Default values if missing
+    const name = USER_DATA.name || '';
+    const bio = USER_DATA.bio || '';
+    const location = USER_DATA.location || '';
+    const link = USER_DATA.link || '';
+    const company = USER_DATA.company || '';
+    const email = USER_DATA.email || user.email || '';
+    const pronouns = USER_DATA.pronouns || "Don't specify";
+    const avatarUrl = USER_DATA.avatarUrl || user.avatarUrl || `https://github.com/${(user.username || 'github').replace(/\s+/g, '')}.png`;
 
-    // Create edit form
-    bio.style.display = 'none';
-    meta.style.display = 'none';
-    
-    nameH1.innerHTML = `<input type="text" id="edit-name" value="${USER_DATA.name}" class="form-control" style="font-size: 1.5rem; width: 100%;">`;
-    
-    actions.innerHTML = `
-        <div class="edit-fields" style="margin-bottom: 12px;">
-            <label style="font-size: 12px; color: var(--text-muted);">Bio</label>
-            <textarea id="edit-bio" class="form-control" style="width: 100%; height: 80px; margin-bottom: 8px;">${USER_DATA.bio}</textarea>
+    container.innerHTML = `
+        <div class="settings-layout" style="width: 100%; max-width: 900px; margin: 0 auto;">
+            <div class="settings-main">
+                <h2>Public profile</h2>
+                
+                <div class="form-group">
+                    <label>Name</label>
+                    <input type="text" id="edit-name" value="${name}" class="form-control" style="width: 100%; max-width: 400px;">
+                </div>
+                
+                <div class="form-group">
+                    <label>Public email</label>
+                    <select id="edit-email" class="form-control" style="width: 100%; max-width: 400px;">
+                        <option value="">Select a verified email to display</option>
+                        <option value="${email}" ${email ? 'selected' : ''}>${email || 'user@example.com'}</option>
+                    </select>
+                    <p class="form-note">You can manage verified email addresses in your email settings.</p>
+                </div>
+                
+                <div class="form-group">
+                    <label>Bio</label>
+                    <textarea id="edit-bio" class="form-control" style="width: 100%; max-width: 500px; height: 100px;">${bio}</textarea>
+                    <p class="form-note">You can @mention other users and organizations to link to them.</p>
+                </div>
+                
+                <div class="form-group">
+                    <label>Pronouns</label>
+                    <select id="edit-pronouns" class="form-control" style="width: 100%; max-width: 200px;">
+                        <option ${pronouns === "Don't specify" ? 'selected' : ''}>Don't specify</option>
+                        <option ${pronouns === "he/him" ? 'selected' : ''}>he/him</option>
+                        <option ${pronouns === "she/her" ? 'selected' : ''}>she/her</option>
+                        <option ${pronouns === "they/them" ? 'selected' : ''}>they/them</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label><i data-lucide="link" style="width:16px; height:16px; vertical-align:middle; margin-right:4px;"></i> URL</label>
+                    <input type="text" id="edit-link" value="${link}" class="form-control" style="width: 100%; max-width: 400px;">
+                </div>
+                
+                <div class="form-group">
+                    <label><i data-lucide="building" style="width:16px; height:16px; vertical-align:middle; margin-right:4px;"></i> Company</label>
+                    <input type="text" id="edit-company" value="${company}" class="form-control" style="width: 100%; max-width: 400px;">
+                </div>
+                
+                <div class="form-group">
+                    <label><i data-lucide="map-pin" style="width:16px; height:16px; vertical-align:middle; margin-right:4px;"></i> Location</label>
+                    <input type="text" id="edit-location" value="${location}" class="form-control" style="width: 100%; max-width: 400px;">
+                </div>
+                
+                <h3 style="margin-top: 32px; font-weight: 500; border-bottom: 1px solid var(--border); padding-bottom: 8px; margin-bottom: 16px;">GitHub Integration</h3>
+                <div class="form-group" style="background: var(--bg-hover); padding: 16px; border-radius: var(--radius); border: 1px solid var(--border);">
+                    <p style="margin-bottom: 12px; font-size: 0.9rem;">Connect your GitHub account to directly create and push repositories from SQL Mastery.</p>
+                    <button class="btn btn--outline" id="btn-github-auth" onclick="handleGitHubConnect()">
+                        <i data-lucide="github" style="width:16px; height:16px; margin-right:4px;"></i> Connect GitHub Account
+                    </button>
+                    ${USER_DATA.githubConnected ? '<p style="color: var(--success); margin-top: 8px; font-size: 0.85rem;"><i data-lucide="check-circle" style="width:14px; height:14px; vertical-align:middle;"></i> Connected</p>' : ''}
+                </div>
+
+                <div style="margin-top: 32px; display: flex; gap: 8px;">
+                    <button class="btn btn--success" onclick="saveProfileChanges()">Update profile</button>
+                    <button class="btn btn--outline" onclick="initProfileSection()">Cancel</button>
+                </div>
+            </div>
             
-            <label style="font-size: 12px; color: var(--text-muted);">Location</label>
-            <input type="text" id="edit-location" value="${USER_DATA.location}" class="form-control" style="width: 100%; margin-bottom: 8px;">
-            
-            <label style="font-size: 12px; color: var(--text-muted);">Website</label>
-            <input type="text" id="edit-link" value="${USER_DATA.link}" class="form-control" style="width: 100%; margin-bottom: 12px;">
-            
-            <div style="display: flex; gap: 8px;">
-                <button class="btn btn--success btn--sm btn--block" onclick="saveProfileChanges()">Save</button>
-                <button class="btn btn--outline btn--sm btn--block" onclick="initProfileSection()">Cancel</button>
+            <div class="settings-sidebar">
+                <label style="font-weight: 600; font-size: 0.9rem; display: block;">Profile picture</label>
+                <img src="${avatarUrl}" onerror="this.src='https://github.com/github.png'" class="avatar-large" id="settings-avatar-preview">
+                
+                <div style="margin-top: 8px;">
+                    <button class="btn btn--outline btn--sm" onclick="document.getElementById('avatar-upload-input').style.display = 'block'">Edit</button>
+                    <div id="avatar-upload-input" style="display: none; margin-top: 8px;">
+                        <input type="text" id="edit-avatar-url" class="form-control" placeholder="Paste image URL here" style="width: 100%; font-size: 0.8rem; margin-bottom: 8px;">
+                        <button class="btn btn--outline btn--sm" onclick="const url = document.getElementById('edit-avatar-url').value; if(url) document.getElementById('settings-avatar-preview').src = url;">Preview</button>
+                    </div>
+                </div>
             </div>
         </div>
     `;
+    
+    if (window.lucide) lucide.createIcons();
 }
 
 function saveProfileChanges() {
@@ -199,11 +264,24 @@ function saveProfileChanges() {
     USER_DATA.bio = document.getElementById('edit-bio').value;
     USER_DATA.location = document.getElementById('edit-location').value;
     USER_DATA.link = document.getElementById('edit-link').value;
+    USER_DATA.company = document.getElementById('edit-company').value;
+    USER_DATA.email = document.getElementById('edit-email').value;
+    USER_DATA.pronouns = document.getElementById('edit-pronouns').value;
+    
+    const newAvatar = document.getElementById('edit-avatar-url') ? document.getElementById('edit-avatar-url').value : null;
+    if (newAvatar) {
+        USER_DATA.avatarUrl = newAvatar;
+        const user = JSON.parse(localStorage.getItem('sql_mastery_user'));
+        if (user) {
+            user.avatarUrl = newAvatar;
+            localStorage.setItem('sql_mastery_user', JSON.stringify(user));
+        }
+    }
     
     saveUserData();
     initProfileSection();
     
-    // Also update navbar if needed (optional, app.js handles auth UI usually)
+    // Also update navbar
     if (window.updateAuthUI) window.updateAuthUI();
 }
 

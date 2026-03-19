@@ -9,9 +9,12 @@
     function updateAuthUI() {
         const user = JSON.parse(localStorage.getItem('sql_mastery_user'));
         if (user && user.connected) {
+            // Prioritize avatarUrl (from Google Auth or Profile Upload), fallback to github generic, then default
+            const userAvatar = user.avatarUrl || `https://github.com/${user.username.replace(/\s+/g, '')}.png`;
+            
             authContainer.innerHTML = `
                 <div class="nav-user" style="display: flex; align-items: center; gap: 8px; cursor: pointer;" id="nav-user-dropdown-btn">
-                    <img src="https://github.com/${user.username}.png" alt="Avatar" style="width: 24px; height: 24px; border-radius: 50%; border: 1px solid var(--border);">
+                    <img src="${userAvatar}" alt="Avatar" onerror="this.src='https://github.com/github.png'" style="width: 24px; height: 24px; border-radius: 50%; border: 1px solid var(--border); object-fit: cover;">
                     <span style="font-size: 0.9rem; font-weight: 600;">${user.username}</span>
                     <i data-lucide="chevron-down" style="width: 14px; height: 14px;"></i>
                 </div>
