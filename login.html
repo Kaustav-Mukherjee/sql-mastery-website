@@ -208,39 +208,46 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getAuth, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyDo5hIejLb5kdKisLmx1NEyGvddqWACGMg",
-            authDomain: "sql-mastery-auth.firebaseapp.com",
-            projectId: "sql-mastery-auth",
-            storageBucket: "sql-mastery-auth.firebasestorage.app",
-            messagingSenderId: "356247907572",
-            appId: "1:356247907572:web:0b9badf5cfb69682f5c2a1",
-            measurementId: "G-KZJ47QF6FN"
-        };
+        // Fetch config from serverless function
+        async function initAuth() {
+            try {
+                const response = await fetch('/api/config');
+                const firebaseConfig = await response.json();
+                
+                if (!firebaseConfig.apiKey) {
+                    console.error('Firebase API Key missing in environment!');
+                    return;
+                }
 
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const provider = new GoogleAuthProvider();
+                const app = initializeApp(firebaseConfig);
+                const auth = getAuth(app);
+                const provider = new GoogleAuthProvider();
 
-        document.getElementById('btn-google-signin').addEventListener('click', () => {
-            signInWithPopup(auth, provider)
-                .then((result) => {
-                    const user = result.user;
-                    localStorage.setItem('sql_mastery_user', JSON.stringify({
-                        username: user.displayName || 'SQL Learner',
-                        connected: true,
-                        email: user.email,
-                        avatarUrl: user.photoURL,
-                        bio: 'SQL enthusiast.',
-                        links: { website: '', twitter: '' }
-                    }));
-                    window.location.href = 'index.html';
-                })
-                .catch((error) => {
-                    console.error('Auth error:', error.message);
-                    alert('Could not sign in with Google!');
+                document.getElementById('btn-google-signin').addEventListener('click', () => {
+                    signInWithPopup(auth, provider)
+                        .then((result) => {
+                            const user = result.user;
+                            localStorage.setItem('sql_mastery_user', JSON.stringify({
+                                username: user.displayName || 'SQL Learner',
+                                connected: true,
+                                email: user.email,
+                                avatarUrl: user.photoURL,
+                                bio: 'SQL enthusiast.',
+                                links: { website: '', twitter: '' }
+                            }));
+                            window.location.href = 'index.html';
+                        })
+                        .catch((error) => {
+                            console.error('Auth error:', error.message);
+                            alert('Could not sign in with Google! Check if API Key is configured in Vercel.');
+                        });
                 });
-        });
+            } catch (err) {
+                console.error('Failed to load auth config:', err);
+            }
+        }
+
+        initAuth();
     </script>
 </body>
 </html>

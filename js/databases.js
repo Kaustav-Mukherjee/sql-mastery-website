@@ -1,105 +1,68 @@
-// ===== DATABASE EXPLORER MODULE =====
+// ===== GENERAL DATABASE KNOWLEDGE (DATABASE 101) =====
 
-const DATABASES = [
+const DATABASE_101 = [
     {
-        id: 'ecommerce',
-        name: 'E-commerce Store',
-        icon: 'shopping-cart',
-        description: 'A complete online store database with products, users, orders, and reviews. Perfect for learning JOINs and Aggregations.',
-        stats: { tables: 5, rows: '250+' },
-        tables: ['users', 'products', 'orders', 'order_items', 'reviews']
+        id: "db-basics",
+        icon: "database",
+        title: "What is a Database?",
+        content: "A database is an organized collection of structured information, or data, typically stored electronically in a computer system.",
+        diagram: `sequenceDiagram
+            participant User
+            participant App
+            participant DB
+            User->>App: Submits Form
+            App->>DB: INSERT INTO users...
+            DB-->>App: Success
+            App-->>User: "Profile Saved!"`
     },
     {
-        id: 'social-media',
-        name: 'Social Network',
-        icon: 'users',
-        description: 'Profiles, friendships, posts, and likes. Great for practicing complex relationships and subqueries.',
-        stats: { tables: 4, rows: '500+' },
-        tables: ['profiles', 'posts', 'comments', 'friendships']
+        id: "db-types",
+        icon: "layers",
+        title: "Types of Databases",
+        content: "Databases evolved from file-based systems to Relational (SQL) and Non-Relational (NoSQL) systems.",
+        list: [
+            "**Relational (RDBMS)**: Structured data in tables (MySQL, PostgreSQL, SQL Server).",
+            "**NoSQL**: Unstructured or semi-structured data (MongoDB, Cassandra).",
+            "**In-Memory**: High-speed, RAM-based (Redis).",
+            "**Cloud**: Distributed storage (DynamoDB, BigQuery)."
+        ],
+        diagram: `graph TD
+            A[Databases] --> B[Relational/SQL]
+            A --> C[NoSQL]
+            B --> B1[PostgreSQL]
+            B --> B2[MySQL]
+            C --> C1[Document]
+            C --> C2[Key-Value]`
     },
     {
-        id: 'university',
-        name: 'School Management',
-        icon: 'graduation-cap',
-        description: 'Students, courses, enrollments, and grades. Good for understanding data integrity and constraints.',
-        stats: { tables: 4, rows: '150+' },
-        tables: ['students', 'courses', 'instructors', 'enrollments']
+        id: "acid-properties",
+        icon: "shield-check",
+        title: "ACID Properties",
+        content: "The standard for reliability in database transactions.",
+        list: [
+            "**Atomicity**: All or nothing.",
+            "**Consistency**: Only valid data is saved.",
+            "**Isolation**: Concurrent tasks don't interfere.",
+            "**Durability**: Data persists after system failure."
+        ],
+        diagram: `sequenceDiagram
+            Note left of Transaction: Begin
+            Transaction->>DB: Step 1: Withdraw $100
+            Transaction->>DB: Step 2: Deposit $100
+            Note right of DB: Fails in Step 2
+            DB->>Transaction: Rollback Step 1
+            Note left of Transaction: Atomicity Ensured`
+    },
+    {
+        id: "sql-vs-nosql",
+        icon: "git-compare",
+        title: "SQL vs NoSQL",
+        content: "Choosing between structured schemas and flexible scaling.",
+        list: [
+            "**SQL**: Predefined schema, Vertical scaling, ACID compliant.",
+            "**NoSQL**: Dynamic schema, Horizontal scaling, Better for large datasets."
+        ]
     }
 ];
 
-function renderDatabaseCard(db) {
-    return `
-        <div class="db-card" id="db-${db.id}">
-            <div class="db-card-header">
-                <div class="db-card-title">
-                    <i data-lucide="${db.icon}" style="width: 18px; color: var(--accent);"></i>
-                    ${db.name}
-                </div>
-                <button class="btn btn--outline btn--sm" onclick="selectDatabase('${db.id}')">
-                    Use Dataset
-                </button>
-            </div>
-            <p class="db-card-desc">${db.description}</p>
-            <div class="db-card-stats">
-                <span><i data-lucide="layout" style="width: 12px; vertical-align: middle; margin-right: 4px;"></i>${db.stats.tables} Tables</span>
-                <span><i data-lucide="rows" style="width: 12px; vertical-align: middle; margin-right: 4px;"></i>${db.stats.rows} Rows</span>
-            </div>
-        </div>
-    `;
-}
-
-function initDatabasesSection() {
-    const section = document.getElementById('section-databases');
-    if (!section) return;
-
-    section.innerHTML = `
-        <div class="section-header">
-            <h2 class="section-title">
-                <i data-lucide="database" style="margin-right: 12px; color: var(--accent);"></i>
-                Database Explorer
-            </h2>
-            <p class="section-subtitle">Select a curated dataset to power your learning and practice sessions.</p>
-        </div>
-        
-        <div class="db-grid">
-            ${DATABASES.map(renderDatabaseCard).join('')}
-        </div>
-
-        <div class="db-status" id="db-load-status">
-            <i data-lucide="check-circle" style="width: 14px; color: #3fb950;"></i>
-            Connected to SQLite (In-Memory)
-        </div>
-    `;
-
-    if (window.lucide) {
-        lucide.createIcons();
-    }
-}
-
-function selectDatabase(dbId) {
-    const db = DATABASES.find(d => d.id === dbId);
-    if (!db) return;
-
-    // In a real app, this would load the SQL dump into sql.js
-    console.log(`Loading database: ${db.name}`);
-    
-    // Show feedback
-    const status = document.getElementById('db-load-status');
-    status.innerHTML = `<i data-lucide="loader" class="spin" style="width: 14px;"></i> Loading ${db.name}...`;
-    lucide.createIcons();
-
-    setTimeout(() => {
-        status.innerHTML = `<i data-lucide="check-circle" style="width: 14px; color: #3fb950;"></i> Active Database: ${db.name}`;
-        lucide.createIcons();
-        
-        // Switch to Learn section
-        showSection('learn');
-        
-        // Update toast or notification
-        alert(`Successfully connected to ${db.name}!`);
-    }, 800);
-}
-
-// Export if needed
-window.initDatabasesSection = initDatabasesSection;
-window.selectDatabase = selectDatabase;
+window.DATABASE_101 = DATABASE_101;

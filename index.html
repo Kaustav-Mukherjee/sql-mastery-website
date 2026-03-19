@@ -122,11 +122,10 @@
                     <p class="collab-title">Supported Dialects</p>
                     <p class="collab-subtitle">Learn query logic applicable across the industry's top relational databases.</p>
                     <div class="collab-logos">
-                        <span>PostgreSQL</span>
-                        <span>MySQL</span>
-                        <span>SQL Server</span>
-                        <span>SQLite</span>
-                        <span>Oracle db</span>
+                        <span onclick="window.onDialectChange('postgresql')">PostgreSQL</span>
+                        <span onclick="window.onDialectChange('mysql')">MySQL</span>
+                        <span onclick="window.onDialectChange('sqlserver')">SQL Server</span>
+                        <span onclick="window.onDialectChange('sqlite')">SQLite</span>
                     </div>
                 </div>
             </div>
@@ -173,8 +172,21 @@
         <!-- LEARN SECTION -->
         <section class="section" id="section-learn">
             <div class="section-header">
-                <h2 class="section-title">Learn SQL Commands</h2>
-                <p class="section-desc">Click any command below to see its explanation, visual diagram, and a live example you can edit and run.</p>
+                <div class="header-main">
+                    <h2 class="section-title">Learn SQL Commands</h2>
+                    <p class="section-desc">Click any command below to see its explanation, visual diagram, and a live example.</p>
+                </div>
+                <div class="header-actions">
+                    <div class="dialect-selector-wrapper">
+                        <i data-lucide="database" class="selector-icon"></i>
+                        <select id="learn-dialect-select" class="dialect-selector" onchange="window.onDialectChange(this.value)">
+                            <option value="sqlite">SQLite</option>
+                            <option value="postgresql">PostgreSQL</option>
+                            <option value="mysql">MySQL</option>
+                            <option value="sqlserver">SQL Server</option>
+                        </select>
+                    </div>
+                </div>
             </div>
             <div class="learn-categories" id="learn-categories">
                 <!-- Populated by learn.js -->
@@ -187,8 +199,21 @@
         <!-- PRACTICE SECTION -->
         <section class="section" id="section-practice">
             <div class="section-header">
-                <h2 class="section-title">Practice SQL Queries</h2>
-                <p class="section-desc">Solve real-world SQL challenges. Run your queries, see live results, and check answers only when you're ready.</p>
+                <div class="header-main">
+                    <h2 class="section-title">Practice SQL Queries</h2>
+                    <p class="section-desc">Solve real-world SQL challenges. Run your queries, see live results, and check answers.</p>
+                </div>
+                <div class="header-actions">
+                    <div class="dialect-selector-wrapper">
+                        <i data-lucide="database" class="selector-icon"></i>
+                        <select id="practice-dialect-select" class="dialect-selector" onchange="window.onDialectChange(this.value)">
+                            <option value="sqlite">SQLite</option>
+                            <option value="postgresql">PostgreSQL</option>
+                            <option value="mysql">MySQL</option>
+                            <option value="sqlserver">SQL Server</option>
+                        </select>
+                    </div>
+                </div>
             </div>
             <div class="practice-tabs" id="practice-tabs">
                 <button class="practice-tab active" data-mode="beginner" id="tab-beginner">
@@ -248,23 +273,19 @@
     <script type="module">
         import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
         mermaid.initialize({ 
-            startOnLoad: false, // Don't block initial render
+            startOnLoad: false, 
             theme: 'dark',
             securityLevel: 'loose'
         });
         window.mermaid = mermaid; 
     </script>
-    <script src="js/stats.js" defer></script>
-    <script src="js/dialect_data.js?v=2" defer></script>
-    <script src="js/intro.js?v=2" defer></script>
-    <script src="js/dialects.js?v=2" defer></script>
-    <script src="js/databases.js?v=2" defer></script>
-    <script src="js/profile.js?v=2" defer></script>
-    <script src="js/learn.js?v=2" defer></script>
-    <script src="js/practice.js?v=2" defer></script>
-    <script src="js/app.js?v=2" defer></script>
+    
+    <!-- Consolidated Bundles -->
+    <script src="js/data_bundle.js?v=3" defer></script>
+    <script src="js/app_bundle.js?v=3" defer></script>
+
     <script>
-        // Initialize Lucide icons after DOM is ready
+        // Initialize Lucide icons
         document.addEventListener('DOMContentLoaded', () => {
             if (window.lucide) lucide.createIcons();
         });

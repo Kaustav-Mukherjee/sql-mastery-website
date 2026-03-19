@@ -181,44 +181,81 @@ window.initIntroSection = function(dialectId = null) {
     const videosContainer = document.getElementById('intro-videos');
     if (!cardsContainer) return;
 
-    // Use Dialect Data if available, fallback to default
-    let topics = INTRO_TOPICS;
-    let name = "Standard SQL";
+    // 1. Start with General DB Knowledge (from databases.js)
+    let allTopics = [...(window.DATABASE_101 || [])];
+    
+    // 2. Add Dialect Specific Intro
+    let dialectName = "Standard SQL";
     if (dialectId && window.DIALECT_DATA && window.DIALECT_DATA[dialectId]) {
-        topics = window.DIALECT_DATA[dialectId].intro || topics;
-        name = window.DIALECT_DATA[dialectId].name;
+        const dialectIntro = window.DIALECT_DATA[dialectId].intro || [];
+        allTopics = [...allTopics, ...dialectIntro];
+        dialectName = window.DIALECT_DATA[dialectId].name;
+    } else {
+        // Fallback to default if no dialect or dialect doesn't have intro
+        allTopics = [...allTopics, ...INTRO_TOPICS];
     }
 
-    // Update section description with dialect name
+    // Update section description
     const sectionDesc = document.querySelector('#section-intro .section-desc');
     if (sectionDesc) {
-        sectionDesc.innerHTML = `Learning the fundamentals of <strong>${name}</strong>. Topics include core concepts, architecture, and basic operations.`;
+        sectionDesc.innerHTML = `Comprehensive guide to <strong>Databases</strong> and <strong>${dialectName}</strong>. Master the core theory, architecture, and practical commands.`;
     }
 
-    cardsContainer.innerHTML = topics.map(renderIntroCard).join('');
+    cardsContainer.innerHTML = allTopics.map(renderIntroCard).join('');
 
     if (videosContainer) {
         videosContainer.innerHTML = `
-            <div class="intro-videos-title"><i data-lucide="video"></i> Recommended Video Lectures</div>
+            <div class="intro-videos-title"><i data-lucide="video"></i> Recommended Learning Path</div>
             <div class="video-grid">${YOUTUBE_VIDEOS.map(renderVideoCard).join('')}</div>
         `;
     }
 
     if (window.lucide) lucide.createIcons();
 
-    // Auto-open first card
-    if (topics.length > 0) {
-        const firstCard = document.getElementById(`intro-${topics[0].id}`);
+    // Auto-open first card (General Knowledge)
+    if (allTopics.length > 0) {
+        const firstCard = document.getElementById(`intro-${allTopics[0].id}`);
         if (firstCard) firstCard.classList.add('open');
     }
 
-    // Trigger mermaid
-    setTimeout(() => {
-        if (window.mermaid) {
-            window.mermaid.run({ querySelector: '.mermaid' }).catch(err => {});
-        }
-    }, 200);
+    // Initialize Sequential Diagram Rendering (Intersection Observer)
+    initSequentialDiagrams();
 };
+
+function initSequentialDiagrams() {
+    if (!window.IntersectionObserver) {
+        // Fallback for older browsers
+        setTimeout(() => {
+            if (window.mermaid) window.mermaid.run({ querySelector: '.mermaid' }).catch(e => {});
+        }, 500);
+        return;
+    }
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const container = entry.target;
+                const source = container.previousElementSibling;
+                
+                if (source && source.classList.contains('mermaid-source') && !container.dataset.rendered) {
+                    // Add a slight delay for "sequential" feel
+                    setTimeout(() => {
+                        const mermaidId = 'diag-' + Math.random().toString(36).substr(2, 5);
+                        window.mermaid.render(mermaidId, source.textContent.trim())
+                            .then(result => {
+                                container.innerHTML = result.svg;
+                                container.dataset.rendered = 'true';
+                                container.classList.add('rendered'); // For CSS animations
+                            }).catch(err => console.error("Mermaid error:", err));
+                    }, 150);
+                }
+                observer.unobserve(container);
+            }
+        });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.mermaid-container').forEach(diag => observer.observe(diag));
+}
 
 // ===== INTERACTIONS =====
 window.toggleIntroCard = function(id) {
