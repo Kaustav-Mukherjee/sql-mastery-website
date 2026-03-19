@@ -66,9 +66,9 @@
             if (window.initDatabasesSection) initDatabasesSection();
         } else if (sectionId === 'profile') {
             if (window.initProfileSection) initProfileSection();
+        } else if (sectionId === 'dialects') {
+            if (window.initDialectsSection) initDialectsSection();
         }
-
-        // Global icon refresh for new dynamic content
         if (window.lucide) {
             lucide.createIcons();
         }

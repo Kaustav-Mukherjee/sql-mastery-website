@@ -11,13 +11,14 @@ const INTRO_TOPICS = [
                 <strong>data organized in tables</strong> (like spreadsheets with rows and columns).
             </p>
             <div class="intro-diagram" style="background:#010409; padding: 16px; border-radius:6px; margin:16px 0; border:1px solid #30363d; text-align:center;">
-                <div class="mermaid">
+                <div class="mermaid-source" style="display:none">
                     graph LR
                     App[Client/App] -->|Requests Data| RDBMS[(Database)]
                     RDBMS -->|Returns Data| App
                     style App fill:#1f6feb,stroke:#58a6ff,color:#fff
                     style RDBMS fill:#238636,stroke:#2ea043,color:#fff
                 </div>
+                <div class="mermaid-container"></div>
             </div>
             <div class="intro-facts">
                 <div class="intro-fact">
@@ -45,7 +46,7 @@ const INTRO_TOPICS = [
                 SQL reads like English: <em>"Get name and salary from employees where department is Engineering."</em>
             </p>
             <div class="intro-diagram" style="background:#010409; padding: 16px; border-radius:6px; margin:16px 0; border:1px solid #30363d; text-align:center;">
-                <div class="mermaid">
+                <div class="mermaid-source" style="display:none">
                     graph LR
                     User[You] -.->|Write SQL| Engine[SQL Engine]
                     Engine -->|Execute| Data[(Tables)]
@@ -53,6 +54,7 @@ const INTRO_TOPICS = [
                     style Engine fill:#1f6feb,stroke:#58a6ff,color:#fff
                     style Data fill:#238636,stroke:#2ea043,color:#fff
                 </div>
+                <div class="mermaid-container"></div>
             </div>
         `
     },
@@ -121,7 +123,7 @@ const INTRO_TOPICS = [
                 process your SQL queries. Common examples include PostgreSQL, MySQL, and SQL Server.
             </p>
             <div class="intro-diagram" style="background:#010409; padding: 16px; border-radius:6px; margin:16px 0; border:1px solid #30363d; text-align:center;">
-                <div class="mermaid">
+                <div class="mermaid-source" style="display:none">
                     graph LR
                     Web[Web Browser] -->|API Request| Backend[App Server]
                     Backend -->|SQL Query| DB[(DB Server)]
@@ -132,6 +134,7 @@ const INTRO_TOPICS = [
                     style Backend fill:#8957e5,stroke:#d2a8ff,color:#fff
                     style DB fill:#238636,stroke:#2ea043,color:#fff
                 </div>
+                <div class="mermaid-container"></div>
             </div>
             <div class="intro-facts">
                 <div class="intro-fact">
@@ -262,5 +265,26 @@ function toggleIntroCard(id) {
     const card = document.getElementById(`intro-${id}`);
     if (card) {
         card.classList.toggle('open');
+        
+        // Dynamic Mermaid Rendering
+        if (card.classList.contains('open') && window.mermaid) {
+            const containers = card.querySelectorAll('.mermaid-container');
+            const sources = card.querySelectorAll('.mermaid-source');
+            
+            for (let i = 0; i < sources.length; i++) {
+                if (!containers[i].dataset.rendered) {
+                    const mermaidId = 'mermaid-intro-' + Math.random().toString(36).substr(2, 9);
+                    window.mermaid.render(mermaidId, sources[i].textContent.trim())
+                        .then(result => {
+                            containers[i].innerHTML = result.svg;
+                            containers[i].dataset.rendered = 'true';
+                        })
+                        .catch(err => {
+                            console.error('Mermaid render error:', err);
+                            containers[i].innerHTML = `<span style="color:red; font-size:12px; display:block; padding:10px;">Graphic failed: ${err.message || err}</span>`;
+                        });
+                }
+            }
+        }
     }
 }

@@ -21,6 +21,7 @@
             <a href="#" class="nav-link" data-section="learn" id="nav-learn">Learn</a>
             <a href="#" class="nav-link" data-section="practice" id="nav-practice">Practice</a>
             <a href="#" class="nav-link" data-section="databases" id="nav-databases">Databases</a>
+            <a href="#" class="nav-link" data-section="dialects" id="nav-dialects">Dialects</a>
             <a href="#" class="nav-link" data-section="profile" id="nav-profile">Profile</a>
         </div>
         <div class="nav-right" id="nav-auth-container">
@@ -167,6 +168,18 @@
             </div>
         </section>
 
+        <!-- DIALECTS SECTION -->
+        <section class="section" id="section-dialects">
+            <div class="section-header">
+                <i data-lucide="book-open" class="section-icon"></i>
+                <h2 class="section-title">SQL Dialects</h2>
+                <p class="section-desc">Learn the detailed differences, features, and architectures of the industry's top relational databases.</p>
+            </div>
+            <div class="intro-grid" id="dialects-cards">
+                <!-- Populated by dialects.js -->
+            </div>
+        </section>
+
         <!-- PROFILE SECTION -->
         <section class="section" id="section-profile">
             <div class="profile-container" id="profile-content">
@@ -186,12 +199,13 @@
         mermaid.initialize({ startOnLoad: true, theme: 'dark' });
         window.mermaid = mermaid; // Export for dynamic re-rendering if needed
     </script>
-    <script src="js/intro.js"></script>
-    <script src="js/databases.js"></script>
-    <script src="js/profile.js"></script>
-    <script src="js/learn.js"></script>
-    <script src="js/practice.js"></script>
-    <script src="js/app.js"></script>
+    <script src="js/intro.js?v=2"></script>
+    <script src="js/dialects.js?v=2"></script>
+    <script src="js/databases.js?v=2"></script>
+    <script src="js/profile.js?v=2"></script>
+    <script src="js/learn.js?v=2"></script>
+    <script src="js/practice.js?v=2"></script>
+    <script src="js/app.js?v=2"></script>
     <script>
         // Initialize Lucide icons
         lucide.createIcons();
