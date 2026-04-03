@@ -4,8 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SQL Mastery — Learn & Practice SQL Interactively</title>
-    <meta name="description" content="Master SQL with interactive diagrams, plain-English explanations, and a live SQL playground. Practice at beginner, intermediate, and advanced levels.">
-    <link rel="stylesheet" href="css/style.css">
+    <meta name="description" content="Master SQL with straight-forward explanations. Your sole focus on learning the standard relational database commands.">
+    <link rel="stylesheet" href="css/style.css?v=3">
+    <link rel="stylesheet" href="css/doc-layout.css">
+    <style>
+        .mermaid { background: transparent; display: flex; justify-content: center; }
+        .feature-card .mermaid { margin-top: 1.5rem; }
+    </style>
 </head>
 <body>
     <!-- Navigation -->
@@ -15,69 +20,22 @@
             <span class="logo-text">SQL<span class="logo-accent">Mastery</span></span>
         </a>
 
-        <!-- Mobile Menu Toggle -->
         <button class="nav-mobile-toggle" id="nav-mobile-toggle" aria-label="Toggle Menu">
             <i data-lucide="menu"></i>
         </button>
 
         <div class="nav-links-container" id="nav-links-container">
             <div class="nav-links">
-                <!-- Group 1: Mastery (The Journey) -->
-                <div class="nav-dropdown">
-                    <button class="nav-drop-btn">Mastery <i data-lucide="chevron-down"></i></button>
-                    <div class="nav-drop-content">
-                        <a href="#" class="nav-link" data-section="intro">
-                            <i data-lucide="book-open"></i> Introduction
-                        </a>
-                        <a href="#" class="nav-link" data-section="learn">
-                            <i data-lucide="graduation-cap"></i> Command Center
-                        </a>
-                        <a href="#" class="nav-link" data-section="practice">
-                            <i data-lucide="code-2"></i> Practice Arena
-                        </a>
-                    </div>
-                </div>
-
-                <!-- Group 2: Dialect Hub (The Context) - This will be dynamically updated -->
-                <div class="nav-dropdown" id="nav-dialect-hub">
-                    <button class="nav-drop-btn" id="active-dialect-name">SQLite <i data-lucide="chevron-down"></i></button>
-                    <div class="nav-drop-content" id="dialect-hub-content">
-                        <!-- Dynamic items added via JS -->
-                        <a href="#" class="nav-link" data-section="intro">
-                            <i data-lucide="info"></i> About SQLite
-                        </a>
-                        <a href="#" class="nav-link" data-section="learn">
-                            <i data-lucide="terminal"></i> SQLite Commands
-                        </a>
-                        <div style="border-top: 1px solid var(--border); margin: 4px 0;"></div>
-                        <a href="#" class="nav-link" data-section="dialects">
-                            <i data-lucide="refresh-cw"></i> Switch Dialect
-                        </a>
-                    </div>
-                </div>
-
-                <!-- Group 3: Tools & Resources -->
-                <div class="nav-dropdown">
-                    <button class="nav-drop-btn">Tools <i data-lucide="chevron-down"></i></button>
-                    <div class="nav-drop-content">
-                        <a href="#" class="nav-link" data-section="databases">
-                            <i data-lucide="database"></i> DB Explorer
-                        </a>
-                        <a href="#" class="nav-link" data-section="dialects">
-                            <i data-lucide="git-compare"></i> Compare Dialects
-                        </a>
-                        <a href="#" class="nav-link" data-section="profile">
-                            <i data-lucide="user"></i> My Profile
-                        </a>
-                    </div>
-                </div>
+                <a href="#" class="nav-link active" data-section="home">
+                    <i data-lucide="home"></i> Home
+                </a>
+                <a href="#" class="nav-link" data-section="tutorial">
+                    <i data-lucide="book-open"></i> Tutorials
+                </a>
+                <a href="#" class="nav-link" data-section="practice">
+                    <i data-lucide="code-2"></i> Practice Arena
+                </a>
             </div>
-        </div>
-
-        <div class="nav-right" id="nav-auth-container">
-            <a href="login.html" class="btn btn--outline btn--sm" id="btn-signin-nav">
-                <i data-lucide="log-in"></i> Sign in
-            </a>
         </div>
         <div class="nav-indicator" id="nav-indicator"></div>
     </nav>
@@ -91,203 +49,424 @@
                 <div class="hero-bg-grid"></div>
                 <div class="hero-glow"></div>
                 
-                <!-- Floating Icons -->
-                <div class="floating-icon icon-1" title="Database"><i data-lucide="database"></i><span>PostgreSQL</span></div>
-                <div class="floating-icon icon-2" title="Table"><i data-lucide="table"></i><span>MySQL</span></div>
-                <div class="floating-icon icon-3" title="Server"><i data-lucide="server"></i><span>SQL Server</span></div>
-                <div class="floating-icon icon-4" title="Query"><i data-lucide="terminal-square"></i><span>SQLite</span></div>
-
-                <div class="hero-badge" style="margin-top: 3rem;">✦ Interactive SQL Learning Platform</div>
+                <div class="hero-badge" style="margin-top: 3rem;">✦ Ultimate SQL Guide</div>
                 
                 <h1 class="hero-title" style="max-width: 800px; margin: 0 auto 1.5rem; line-height: 1.3;">
-                    Learn to <span class="highlight-box bg-yellow">write</span> SQL and <br />
-                    <span class="highlight-box bg-blue">query</span> your data
+                    Learn to <span class="highlight-box bg-yellow">master</span> SQL and <br />
+                    <span class="highlight-box bg-blue">query</span> your data seamlessly
                 </h1>
                 
                 <p class="hero-subtitle">
-                    Master every SQL command with plain-English explanations, interactive diagrams, 
-                    and a live playground that runs real queries right in your browser.
+                    Dive right into standard SQL commands with plain-English explanations. Zero setup, just straightforward learning.
                 </p>
                 
                 <div class="hero-actions">
-                    <button class="btn btn--primary btn--lg btn--yellow" id="hero-learn-btn" style="padding: 12px 24px; font-weight: 600;">
-                        Explore Course
+                    <button class="btn btn--primary btn--lg btn--yellow" onclick="window.startTutorial()" style="padding: 12px 24px;">
+                        Start the Introduction
                     </button>
-                    <button class="btn btn--outline btn--lg" id="hero-practice-btn" style="padding: 12px 24px; font-weight: 600;">
-                        Join Free Course
+                    <button class="btn btn--outline btn--lg" onclick="window.startTutorial()" style="padding: 12px 24px;">
+                        View Commands
                     </button>
-                </div>
-                
-                <div class="hero-collaboration">
-                    <p class="collab-title">Supported Dialects</p>
-                    <p class="collab-subtitle">Learn query logic applicable across the industry's top relational databases.</p>
-                    <div class="collab-logos">
-                        <span onclick="window.onDialectChange('postgresql')">PostgreSQL</span>
-                        <span onclick="window.onDialectChange('mysql')">MySQL</span>
-                        <span onclick="window.onDialectChange('sqlserver')">SQL Server</span>
-                        <span onclick="window.onDialectChange('sqlite')">SQLite</span>
-                    </div>
                 </div>
             </div>
 
-            <!-- Feature Cards -->
             <div class="features-grid">
-                <div class="feature-card" id="feature-intro">
+                <div class="feature-card">
                     <div class="feature-icon"><i data-lucide="book"></i></div>
-                    <h3>Beginner-Friendly Intro</h3>
-                    <p>Start with the basics — what databases, SQL, queries, and servers actually are. Zero prior knowledge needed.</p>
+                    <h3>Core Fundamentals</h3>
+                    <p>Start with databases, types of SQL statements, and standard data types to build a rock-solid foundation.</p>
                 </div>
-                <div class="feature-card" id="feature-diagrams">
-                    <div class="feature-icon"><i data-lucide="layout"></i></div>
-                    <h3>Interactive Diagrams</h3>
-                    <p>See exactly how each command transforms your data with animated before-and-after tables.</p>
+                <div class="feature-card">
+                    <div class="feature-icon"><i data-lucide="terminal-square"></i></div>
+                    <h3>Comprehensive Commands</h3>
+                    <p>Learn commands sorted by Beginner, Intermediate, and Advanced difficulties. Nothing extraneous.</p>
                 </div>
-                <div class="feature-card" id="feature-practice">
-                    <div class="feature-icon"><i data-lucide="code"></i></div>
-                    <h3>Live SQL Playground</h3>
-                    <p>Write real SQL queries and see results instantly. A full SQLite database runs right in your browser.</p>
-                </div>
-                <div class="feature-card" id="feature-modes">
-                    <div class="feature-icon"><i data-lucide="award"></i></div>
-                    <h3>3 Difficulty Modes</h3>
-                    <p>Progress from Beginner to Intermediate to Advanced with curated challenges at every level.</p>
+                <div class="feature-card">
+                    <div class="feature-icon"><i data-lucide="zap"></i></div>
+                    <h3>Pure SQL Focus</h3>
+                    <p>Strictly standard SQL without diving into confusing dialect-specific syntax or bloated tools.</p>
                 </div>
             </div>
         </section>
 
-        <!-- INTRO SECTION -->
-        <section class="section" id="section-intro">
-            <div class="section-header">
-                <h2 class="section-title">Introduction to SQL</h2>
-                <p class="section-desc">Before diving into SQL commands, let's understand the fundamentals — what databases are, how SQL works, and why it matters.</p>
-            </div>
-            <div class="intro-grid" id="intro-cards">
-                <!-- Populated by intro.js -->
-            </div>
-            <div id="intro-videos">
-                <!-- Populated by intro.js -->
-            </div>
-        </section>
-
-        <!-- LEARN SECTION -->
-        <section class="section" id="section-learn">
-            <div class="section-header">
-                <div class="header-main">
-                    <h2 class="section-title">Learn SQL Commands</h2>
-                    <p class="section-desc">Click any command below to see its explanation, visual diagram, and a live example.</p>
+        
+        <!-- TUTORIAL DOCUMENTATION LAYOUT -->
+        <div id="tutorial-container" class="doc-layout" style="display:none;">
+            <aside class="tutorial-sidebar">
+                <div class="sidebar-section">
+                    <h4 class="sidebar-title">Getting Started</h4>
+                    <ul class="sidebar-nav" id="sidebar-getting-started">
+                        <li><a href="#" class="sidebar-item active" data-id="intro"><i data-lucide="info"></i> Introduction</a></li>
+                    </ul>
                 </div>
-                <div class="header-actions">
-                    <div class="dialect-selector-wrapper">
-                        <i data-lucide="database" class="selector-icon"></i>
-                        <select id="learn-dialect-select" class="dialect-selector" onchange="window.onDialectChange(this.value)">
-                            <option value="sqlite">SQLite</option>
-                            <option value="postgresql">PostgreSQL</option>
-                            <option value="mysql">MySQL</option>
-                            <option value="sqlserver">SQL Server</option>
-                        </select>
+                <div class="sidebar-section">
+                    <h4 class="sidebar-title">Core Commands</h4>
+                    <ul class="sidebar-nav" id="sidebar-core">
+                        <!-- Populated by JS -->
+                    </ul>
+                </div>
+                <div class="sidebar-section">
+                    <h4 class="sidebar-title">Advanced</h4>
+                    <ul class="sidebar-nav" id="sidebar-advanced">
+                        <!-- Populated by JS -->
+                    </ul>
+                </div>
+            </aside>
+
+            <main class="doc-content-area" id="doc-content-area">
+                <!-- Content injected via JS -->
+            </main>
+        </div>
+
+        <!-- PRACTICE ARENA LAYOUT -->
+        <div id="practice-container" class="doc-layout" style="display:none;">
+            <aside class="practice-sidebar">
+                <div class="sidebar-section">
+                    <h4 class="sidebar-title">Database Schema</h4>
+                    <div id="schema-explorer" class="schema-explorer">
+                        <div class="schema-loading">Loading schema...</div>
                     </div>
                 </div>
-            </div>
-            <div class="learn-categories" id="learn-categories">
-                <!-- Populated by learn.js -->
-            </div>
-            <div class="learn-cards" id="learn-cards">
-                <!-- Populated by learn.js -->
-            </div>
-        </section>
+            </aside>
 
-        <!-- PRACTICE SECTION -->
-        <section class="section" id="section-practice">
-            <div class="section-header">
-                <div class="header-main">
-                    <h2 class="section-title">Practice SQL Queries</h2>
-                    <p class="section-desc">Solve real-world SQL challenges. Run your queries, see live results, and check answers.</p>
+            <main class="doc-content-area">
+                <div class="lesson-header">
+                    <h1 class="lesson-title">Practice Arena</h1>
+                    <p class="lesson-meaning">A limitless sandbox to perfect your SQL skills. Query the full database schema freely.</p>
                 </div>
-                <div class="header-actions">
-                    <div class="dialect-selector-wrapper">
-                        <i data-lucide="database" class="selector-icon"></i>
-                        <select id="practice-dialect-select" class="dialect-selector" onchange="window.onDialectChange(this.value)">
-                            <option value="sqlite">SQLite</option>
-                            <option value="postgresql">PostgreSQL</option>
-                            <option value="mysql">MySQL</option>
-                            <option value="sqlserver">SQL Server</option>
-                        </select>
+
+                <div class="interactive-container" style="margin-top: 1rem;">
+                    <div class="interactive-schema-bar">
+                        <span style="font-size:0.9rem; color:var(--text-muted); font-family:var(--font-mono)">Sandbox Environment</span>
+                        <button class="btn btn--outline" id="btn-reset-db" style="padding: 4px 12px; font-size: 0.8rem;">Reset Database</button>
+                    </div>
+                    <div class="interactive-body">
+                        <div class="sql-editor-container">
+                            <textarea class="sql-editor-textarea" id="arena-sql-editor" spellcheck="false">SELECT * FROM employees;</textarea>
+                            <div class="sql-run-bar">
+                                <button class="btn btn--primary" id="btn-run-arena-sql">Run Query ▶</button>
+                            </div>
+                        </div>
+                        <div class="live-table-container">
+                            <table class="sql-table" id="arena-table-result"></table>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="practice-tabs" id="practice-tabs">
-                <button class="practice-tab active" data-mode="beginner" id="tab-beginner">
-                    <i data-lucide="sprout"></i> Beginner
-                </button>
-                <button class="practice-tab" data-mode="intermediate" id="tab-intermediate">
-                    <i data-lucide="zap"></i> Intermediate
-                </button>
-                <button class="practice-tab" data-mode="advanced" id="tab-advanced">
-                    <i data-lucide="flame"></i> Advanced
-                </button>
-            </div>
-            <div class="practice-challenges" id="practice-challenges">
-                <!-- Populated by practice.js -->
-            </div>
-        </section>
-
-        <!-- DATABASES SECTION -->
-        <section class="section" id="section-databases">
-            <div class="section-header">
-                <i data-lucide="database" class="section-icon"></i>
-                <h2 class="section-title">Database Explorer</h2>
-                <p class="section-desc">Select a dataset to practice with. Switch between different real-world scenarios instantly.</p>
-            </div>
-            <div class="db-grid" id="db-list">
-                <!-- Populated by databases.js -->
-            </div>
-        </section>
-
-        <!-- DIALECTS SECTION -->
-        <section class="section" id="section-dialects">
-            <div class="section-header">
-                <i data-lucide="book-open" class="section-icon"></i>
-                <h2 class="section-title">SQL Dialects</h2>
-                <p class="section-desc">Learn the detailed differences, features, and architectures of the industry's top relational databases.</p>
-            </div>
-            <div class="intro-grid" id="dialects-cards">
-                <!-- Populated by dialects.js -->
-            </div>
-        </section>
-
-        <!-- PROFILE SECTION -->
-        <section class="section" id="section-profile">
-            <div class="profile-container" id="profile-content">
-                <!-- Populated by profile.js -->
-            </div>
-        </section>
-
+            </main>
+        </div>
     </main>
 
-    <!-- Toast Notification -->
-    <div class="toast" id="toast"></div>
-
-    <!-- Scripts -->
+<!-- Scripts -->
     <script src="https://unpkg.com/lucide@latest"></script>
-    <script src="https://sql.js.org/dist/sql-wasm.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.10.3/sql-wasm.js"></script>
+    
+    <!-- Include Data -->
+    <script src="js/sql_content.js?v=3"></script>
+    <script src="js/practice.js?v=3"></script>
+
+    <!-- Init Logic -->
     <script type="module">
         import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
-        mermaid.initialize({ 
-            startOnLoad: false, 
-            theme: 'dark',
-            securityLevel: 'loose'
-        });
-        window.mermaid = mermaid; 
-    </script>
-    
-    <!-- Consolidated Bundles -->
-    <script src="js/data_bundle.js?v=3" defer></script>
-    <script src="js/app_bundle.js?v=3" defer></script>
+        mermaid.initialize({ startOnLoad: false, theme: 'dark', securityLevel: 'loose' });
+        window.mermaid = mermaid;
+        let mermaidIntroRendered = false;
 
-    <script>
-        // Initialize Lucide icons
         document.addEventListener('DOMContentLoaded', () => {
             if (window.lucide) lucide.createIcons();
+
+            // -- NAVIGATION LOGIC (Home vs Tutorial) --
+            const navLinks = document.querySelectorAll('.nav-link');
+            const sectionHome = document.getElementById('section-home');
+            const tutorialContainer = document.getElementById('tutorial-container');
+            const practiceContainer = document.getElementById('practice-container');
+
+            window.startTutorial = function() {
+                showMainTab('tutorial');
+            };
+
+            function showMainTab(tabId) {
+                navLinks.forEach(link => {
+                    link.classList.toggle('active', link.dataset.section === tabId);
+                });
+                
+                // Hide all containers
+                sectionHome.style.display = 'none';
+                tutorialContainer.style.display = 'none';
+                practiceContainer.style.display = 'none';
+
+                if (tabId === 'home') {
+                    sectionHome.style.display = 'block';
+                } else if (tabId === 'tutorial') {
+                    tutorialContainer.style.display = 'grid';
+                    // Render intro first if nothing is active
+                    if(!document.querySelector('.sidebar-item.active')) {
+                        const introSidebarItem = document.querySelector('[data-id="intro"]');
+                        if (introSidebarItem) introSidebarItem.classList.add('active');
+                        renderIntro();
+                    }
+                } else if (tabId === 'practice') {
+                    practiceContainer.style.display = 'grid';
+                    updateSchemaExplorer();
+                }
+                
+                // Close mobile menu if open
+                const navLinksContainer = document.getElementById('nav-links-container');
+                if (navLinksContainer.classList.contains('active')) {
+                    navLinksContainer.classList.remove('active');
+                }
+            }
+
+            // Mobile Menu Toggle
+            const navMobileToggle = document.getElementById('nav-mobile-toggle');
+            if (navMobileToggle) {
+                navMobileToggle.addEventListener('click', () => {
+                    document.getElementById('nav-links-container').classList.toggle('active');
+                });
+            }
+
+            // Also close menu when clicking outside
+            document.addEventListener('click', (e) => {
+                const navLinksContainer = document.getElementById('nav-links-container');
+                const isToggle = e.target.closest('#nav-mobile-toggle');
+                if (!isToggle && navLinksContainer.classList.contains('active') && !e.target.closest('#nav-links-container')) {
+                    navLinksContainer.classList.remove('active');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    showMainTab(link.dataset.section);
+                });
+            });
+
+            // Redirect Hero Buttons
+            
+
+            // -- INITIALIZE SIDEBAR --
+            const coreNav = document.getElementById('sidebar-core');
+            const advNav = document.getElementById('sidebar-advanced');
+            
+            function buildSidebar() {
+                let coreHtml = '';
+                let advHtml = '';
+                
+                Object.keys(window.SQL_COMMANDS).forEach(key => {
+                    const cmd = window.SQL_COMMANDS[key];
+                    const linkHtml = `<li><a href="#" class="sidebar-item" data-id="${key}">${cmd.title}</a></li>`;
+                    if (cmd.badge.includes('Advanced')) {
+                        advHtml += linkHtml;
+                    } else {
+                        coreHtml += linkHtml;
+                    }
+                });
+                
+                if (coreNav) coreNav.innerHTML = coreHtml;
+                if (advNav) advNav.innerHTML = advHtml;
+            }
+
+            buildSidebar();
+
+            // Handle Sidebar Clicks
+            const sidebarLinks = document.querySelectorAll('.sidebar-item');
+            sidebarLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    sidebarLinks.forEach(l => l.classList.remove('active'));
+                    link.classList.add('active');
+                    
+                    const id = link.dataset.id;
+                    if (id === 'intro') {
+                        renderIntro();
+                    } else {
+                        renderCommandLesson(window.SQL_COMMANDS[id]);
+                        if(window.seedDatabase) window.seedDatabase();
+                    }
+                    if (window.lucide) lucide.createIcons();
+                });
+            });
+
+            // -- RENDERING LOGIC --
+            const contentArea = document.getElementById('doc-content-area');
+
+            function renderIntro() {
+                // Hardcode or pull from structured data. For now, we inline a beautiful intro.
+                contentArea.innerHTML = `
+                    <div class="lesson-header">
+                        <h1 class="lesson-title">Introduction to SQL</h1>
+                        <p class="lesson-meaning">Structured Query Language (SQL) is the standard language for dealing with Relational Databases.</p>
+                    </div>
+                    <div style="background: var(--bg-card); padding: 2rem; border-radius: 12px; border: 1px solid var(--border); margin-bottom: 2rem;">
+                        <h3 style="color:var(--primary); margin-bottom:1rem;">What is a Database?</h3>
+                        <p style="color:var(--text-dim); line-height:1.6; margin-bottom:1.5rem;">An organized collection of structured information or data, typically stored electronically. Databases allow for extremely fast data retrieval and manipulation.</p>
+                        <div class="mermaid" id="intro-mermaid">
+                        graph LR
+                            A(User Request) -->|Queries| B[(Database)]
+                            B -->|Returns Results| A
+                        </div>
+                    </div>
+                `;
+                try {
+                    window.mermaid.run({ querySelector: '#doc-content-area .mermaid' });
+                } catch(e) {}
+            }
+
+            async function renderCommandLesson(cmd) {
+                // ThoughtSpot style header
+                let html = `
+                    <div class="lesson-header">
+                        <h1 class="lesson-title">${cmd.title}</h1>
+                        <p class="lesson-meaning">${cmd.meaning}</p>
+                    </div>
+                `;
+                
+                // Content sections
+                if (cmd.scenario) {
+                    html += `<div class="lesson-section"><h3 class="lesson-section-title">Scenario</h3><p style="color:var(--text-dim); line-height:1.6;">${cmd.scenario}</p></div>`;
+                }
+
+                if (cmd.notes && cmd.notes.length > 0) {
+                    html += `<div class="lesson-section"><h3 class="lesson-section-title">Notes</h3><ul class="custom-bullet-list" style="margin-top:1rem;">`;
+                    cmd.notes.forEach(note => html += `<li>${note}</li>`);
+                    html += `</ul></div>`;
+                }
+
+                // Append static diagram if any
+                if(cmd.diagram) {
+                    html += `<div class="lesson-section"><h3 class="lesson-section-title">Visual Logic</h3>
+                             <div class="mermaid" id="mermaid-${Date.now()}">${cmd.diagram}</div></div>`;
+                }
+
+                // Interactive SQLBolt style block
+                if (cmd.code) {
+                    const defaultQuery = cmd.code;
+                    // Task Checker logic
+                    const taskMsg = cmd.relatedPractice || "Experiment with the command above!";
+                    const taskHTML = `<div class="task-item"><i data-lucide="info" class="task-status-icon" style="color:var(--blue)"></i><span class="task-text">${taskMsg}</span></div>`;
+
+                    html += `
+                    <div class="interactive-container">
+                        <div class="interactive-schema-bar">
+                            <span style="font-size:0.9rem; color:var(--text-muted); font-family:var(--font-mono)">Live Database Environment</span>
+                        </div>
+                        <div class="sqlbolt-panel">
+                            <div class="sql-editor-container">
+                                <textarea class="sql-editor-textarea" id="live-sql-editor" spellcheck="false">${defaultQuery}</textarea>
+                                <div class="sql-run-bar">
+                                    <button class="btn btn--primary" id="btn-run-sql" style="padding: 6px 16px; font-size:0.9rem;">Run Script ▶</button>
+                                </div>
+                            </div>
+                            <div class="tasks-container">
+                                <h4 style="color:#fff; margin-bottom:10px; font-size:1rem;">Task List</h4>
+                                ${taskHTML}
+                            </div>
+                        </div>
+                        <div class="live-table-container">
+                            <table class="dark-table" id="live-table-result">
+                                <tbody>
+                                    <tr><td style="color:var(--text-muted); text-align:center;">Execute query to see results.</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    `;
+                }
+
+                contentArea.innerHTML = html;
+
+                if (window.lucide) lucide.createIcons();
+                try {
+                    window.mermaid.run({ querySelector: '#doc-content-area .mermaid' });
+                } catch(e) {}
+                
+                // Attach event listener for Run Script
+                const runBtn = document.getElementById('btn-run-sql');
+                if(runBtn) {
+                    runBtn.addEventListener('click', runInteractiveSQL);
+                }
+            }
+
+            // --- PRACTICE ARENA LOGIC ---
+            function updateSchemaExplorer() {
+                if (window.getDatabaseSchema) {
+                    const schema = window.getDatabaseSchema();
+                    const explorer = document.getElementById('schema-explorer');
+                    if (!explorer) return;
+
+                    if (!schema || Object.keys(schema).length === 0) {
+                        explorer.innerHTML = '<div class="schema-loading">Initializing database...</div>';
+                        return;
+                    }
+
+                    let html = '';
+                    for (const table in schema) {
+                        html += `
+                            <div class="schema-table">
+                                <div class="schema-table-name"><i data-lucide="table"></i> ${table}</div>
+                                <ul class="schema-columns">
+                                    ${schema[table].map(col => `<li>${col}</li>`).join('')}
+                                </ul>
+                            </div>
+                        `;
+                    }
+                    explorer.innerHTML = html;
+                    if (window.lucide) lucide.createIcons();
+                }
+            }
+
+            const btnRunArena = document.getElementById('btn-run-arena-sql');
+            if (btnRunArena) {
+                btnRunArena.addEventListener('click', () => {
+                    const query = document.getElementById('arena-sql-editor').value;
+                    if (window.executeLiveQuery) {
+                        window.executeLiveQuery(query, 'arena-table-result');
+                    }
+                });
+            }
+
+            const btnResetDb = document.getElementById('btn-reset-db');
+            if (btnResetDb) {
+                btnResetDb.addEventListener('click', () => {
+                    if (window.seedDatabase) {
+                        window.seedDatabase();
+                        updateSchemaExplorer();
+                    }
+                });
+            }
+
+                        function runInteractiveSQL() {
+                const editor = document.getElementById('live-sql-editor');
+                const query = editor.value.trim();
+                
+                // Execute real SQL
+                if(window.executeLiveQuery) {
+                    window.executeLiveQuery(query, 'live-table-result');
+                }
+                
+                // Task Checker Logic
+                const taskAnsElement = document.getElementById('task-1-ans');
+                if(taskAnsElement) {
+                    const expected = taskAnsElement.value.trim().toLowerCase().replace(/;/g, '');
+                    const actual = query.trim().toLowerCase().replace(/;/g, '').replace(/\s+/g, ' ');
+                    
+                    // Basic heuristic for task success checking
+                    if(actual.includes(expected) || actual === expected || expected.includes(actual)) {
+                        const taskItem = document.getElementById('task-1');
+                        if (taskItem && !taskItem.classList.contains('completed')) {
+                            taskItem.classList.add('completed');
+                            const icon = taskItem.querySelector('.task-status-icon');
+                            if (icon) {
+                                icon.setAttribute('data-lucide', 'check-circle');
+                            }
+                            if(window.lucide) window.lucide.createIcons();
+                        }
+                    }
+                }
+            }
+
+            // Also fix the Hero buttons is deprecated as we used window.startTutorial = function() {};
+
+        
         });
     </script>
 </body>
